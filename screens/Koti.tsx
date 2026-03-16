@@ -14,7 +14,7 @@ export function Koti() {
       color="#841584"
       ></Button>
       <Button
-      onPress={() => setTempResult(laskeLenkinKalorit(70, 60, 2.5))}
+      onPress={() => setTempResult(laskeLenkinKalorit(70, 60, 3.5))}
       title="kalorit testi (70kg 60min 2.5mps)"
       color="#841584"
       ></Button>

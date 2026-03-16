@@ -7,21 +7,24 @@ export function laskeAvgNopeus(t0: number, t1:number, x0: number, x1:number):num
 export function laskeLenkinKalorit(painoKilogrammoina:number, Minuutit:number, keskinopeusMPS:number,):number
 {
     let MET:number = 0 //metabolic equivalent of a task, tää on kerroin mikä vastaa suorituksen kuormittavuutta.
-    const keskinopeusKMH:number = (keskinopeusMPS*0.27778)
+    const keskinopeusKMH:number = (keskinopeusMPS/0.27778)
     const hidasNopeus:number = 7 //kilometriä per tunti
     const suuriNopeus:number = 12 //kilometriä per tunti
 
     if(keskinopeusKMH < hidasNopeus)
         {
             MET = 7 //kevyt lenkki
+            console.log("kevyt, " +keskinopeusKMH)
         }
     else if(keskinopeusKMH >= hidasNopeus && keskinopeusKMH <= suuriNopeus)
         {
             MET = 10 //kohtainen lenkki
+            console.log("kohtalainen, " +keskinopeusKMH)
         }
     else
         {
             MET = 12 //nopealenkki
+            console.log("rankka, " +keskinopeusKMH)
         }
 
         return Number((painoKilogrammoina * (MET/60) * Minuutit).toFixed(2))
