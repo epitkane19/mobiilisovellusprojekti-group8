@@ -2,8 +2,7 @@ import { getHeaderTitle } from '@react-navigation/elements';
 import { NativeStackHeaderProps } from '@react-navigation/native-stack'
 import { Dropdown } from 'react-native-element-dropdown';
 import { Dimensions, View, StyleSheet, Text } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { horizontalScale } from '../mathFunctions/functions';
+import { horizontalScale } from '../mathFunctions/FonttiSkaalaaja';
 
 
 type Props = NativeStackHeaderProps
