@@ -26,7 +26,8 @@ export function Profiili({ route }: Props) {
       console.log("useeffect")
     }, []);
 
-    if(Infogiven)
+    if(Infogiven) //kun on antanut tietonsa profiilin luonnissa, niin sillon infogiven muuttuu trueksi, ja kutsutaan Database uudelleen ---> näytön refresh. 
+      //Olisi myös mahdollista ottaa riippuvuustaulukko pois useeffectistä, jolloin se kutsuttaisiin jokaisella tilanmuutoksella sen sijaan että se kutsuttaisiin alussa vain kerran.
     {
       Database({db, setDb, setUserId})
       setInfogiven(false)
