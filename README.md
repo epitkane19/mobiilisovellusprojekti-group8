@@ -1,3 +1,3 @@
 # mobiilisovellusprojekti-group8
 
-<img width="1051" height="634" alt="dbbase" src="https://github.com/user-attachments/assets/3b7e3cba-da94-4a08-a753-d7cbb0fc5016" />
+<img width="1082" height="661" alt="dbbase" src="https://github.com/user-attachments/assets/e048e379-61ac-4d83-9f5f-8be373bc4028" />
