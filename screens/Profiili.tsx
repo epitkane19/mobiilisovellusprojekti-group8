@@ -6,7 +6,7 @@ import { MyChart } from '../components/chart';
 import { ProfiiliValikkoModal } from '../components/ProfiiliModal';
 import { LuoProfiiliValikkoModal } from '../components/LuoProfiiliModal';
 import * as SQLite from 'expo-sqlite';
-import { Database, purgeDb, RefreshUIData } from '../Database/Database';
+import { Database, purgeDb } from '../Database/Database';
 
 const { width, height } = Dimensions.get("window");
 

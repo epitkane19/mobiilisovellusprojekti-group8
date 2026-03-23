@@ -5,7 +5,7 @@ type UserID =
 {
   UserID: number
 }
-export function RefreshUIData({setDb}: RefreshDbProps)
+/*export function RefreshUIData({setDb}: RefreshDbProps)
 {
   const initDB = async () => 
     {
@@ -15,12 +15,12 @@ export function RefreshUIData({setDb}: RefreshDbProps)
     };
  
     initDB();
-}
+}*/
 export function Database({db, setDb, setUserId}: DbProps)
 {
     
     const initDB = async () => {
-    const database = await SQLite.openDatabaseAsync('JogAppDbdev.db');
+    const database = await SQLite.openDatabaseAsync('JogAppDb1dev.db');
     const userid = await getUserID(database)
     setDb(database);
 
@@ -52,7 +52,9 @@ export function Database({db, setDb, setUserId}: DbProps)
         );      
       `);
 
+
       loadUserData(database);
+      const userid = await getUserID(database)
       setUserId(userid)
     };
 
