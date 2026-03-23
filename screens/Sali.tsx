@@ -2,6 +2,7 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import { RootStackParamList } from '../types/navigation'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
+import { useNavigation } from '@react-navigation/native'
 
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Sali'>
