@@ -5,23 +5,22 @@ type UserID =
 {
   UserID: number
 }
-export function RefreshUIData({setDb}: RefreshDbProps)
+/*export function RefreshUIData({setDb}: RefreshDbProps)
 {
   const initDB = async () => 
     {
-      const database = await SQLite.openDatabaseAsync('JogAppDb1dev.db');
+      const database = await SQLite.openDatabaseAsync('JogAppDbdev.db');
       setDb(database);
       console.log("refresh")
     };
  
     initDB();
-}
+}*/
 export function Database({db, setDb, setUserId}: DbProps)
 {
     
     const initDB = async () => {
-    const database = await SQLite.openDatabaseAsync('JogAppDb1dev.db');
-    const userid = await getUserID(database)
+    const database = await SQLite.openDatabaseAsync('JogAppDbdev.db');
     setDb(database);
 
       await database.execAsync(`
@@ -52,7 +51,9 @@ export function Database({db, setDb, setUserId}: DbProps)
         );      
       `);
 
+
       loadUserData(database);
+      const userid = await getUserID(database)
       setUserId(userid)
     };
 
@@ -70,7 +71,7 @@ export const AddProfile = async (etuNimi: string, sukuNimi: string, ikä: string
     const result = await db.runAsync('INSERT INTO UserData (UserID, FirstName, LastName, Weight_Kg, Height_Cm, Age, Date) VALUES (1,?,?,?,?,?, date())', etuNimi, sukuNimi, paino, pituus, ikä) 
     //kovakoodataan userid 1, niin ei voi missään tapauksessa muodostua dublikaatti recordeja ja voi olla ainoastaan 1 käyttäjä.
 
-    const database = await SQLite.openDatabaseAsync('JogAppDb1.db');
+    const database = await SQLite.openDatabaseAsync('JogAppDbdev.db');
     loadUserData(database)
   };
 
@@ -89,6 +90,6 @@ const getUserID = async(db: SQLite.SQLiteDatabase | null) => //tällä haetaan k
 }
   export const purgeDb = async() =>
 {
-  const database = await SQLite.openDatabaseAsync('JogAppDb1dev.db');
+  const database = await SQLite.openDatabaseAsync('JogAppDbdev.db');
   await database.runAsync('DELETE FROM UserData')
 }
