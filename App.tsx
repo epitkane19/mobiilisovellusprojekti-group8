@@ -5,7 +5,7 @@ import { StyleSheet } from 'react-native';
 import { RootStackParamList } from './types/navigation';
 import { CustomNavigationBar } from './components/Appbar';
 import { Koti } from './screens/Koti';
-import { Juoksu } from './screens/Juoksu';
+import { Kartta } from './screens/Kartta';
 import { Profiili } from './screens/Profiili';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useEffect, useState } from 'react';
