@@ -42,7 +42,9 @@ export function Kartta() {
                 lng: position.coords.longitude,
             };
 
-            
+            console.log()
+
+
 
             setCoordList(prev => [...prev, coords]);
 
@@ -69,7 +71,6 @@ export function Kartta() {
         }
 
         if (data === 'stop-tracking') {
-              console.log("STOPPING — coordList at stop:", coordList);
             if (trackingRef.current) {
                 clearInterval(trackingRef.current);
                 trackingRef.current = null;

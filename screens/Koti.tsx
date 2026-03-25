@@ -1,11 +1,29 @@
 import React, { useEffect, useState } from 'react';
 import {View, Text, StyleSheet, Button} from 'react-native';
-import { laskeAvgNopeus, laskeLenkinKalorit, laskeJuoksujenAvgMatka } from '../mathFunctions/functions';
+import { laskeAvgNopeus, laskeLenkinKalorit, laskeJuoksujenAvgMatka, laskeKoordinaatitKilometreiksi } from '../mathFunctions/functions';
 import { Database } from '../Database/Database';
 import { UserData } from '../types/database';
 import * as SQLite from 'expo-sqlite';
 
+interface coordlist 
+{
+    "lat": number
+    "lng": number
+}
+
 export function Koti() {
+
+  const dummyarr =
+[
+{"lat": 65.0608024, "lng": 25.4661418}, 
+{"lat": 49.2125578, "lng": 16.62662018}
+]
+
+const dummyarr2 =
+[
+{"lat": 65.007350, "lng": 25.470208}, 
+{"lat": 65.015101, "lng": 25.466268}
+]
 
   const[TempResult, setTempResult] = useState(0) //hävitä myöhemmin tämä, testiä varten
   const [db, setDb] = useState<SQLite.SQLiteDatabase | null>(null);
@@ -19,8 +37,8 @@ export function Koti() {
   return (
     <View style={style.container}>
       <Button
-      onPress={() => setTempResult(laskeAvgNopeus(0, 5, 0, 14))}
-      title="avg nopeus testi (5 sekuntia 14 metriä"
+      onPress={() => setTempResult(laskeKoordinaatitKilometreiksi(dummyarr2))}
+      title="laskettu matka"
       color="#841584"
       ></Button>
       <Button

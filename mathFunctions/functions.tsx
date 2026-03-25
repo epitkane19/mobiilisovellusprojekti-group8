@@ -44,3 +44,41 @@ export function laskeJuoksujenAvgMatka(juoksut:number[]):number // ottaa paramet
         }
         return Number(avgMatkaKilometrit.toFixed(2)) //palautetaan matka kilometreinä
 }
+
+type coordlist =
+{
+    "lat": number
+    "lng": number
+}
+export function laskeKoordinaatitKilometreiksi(coordList:coordlist[]):number
+{
+    const MaanRadius:number = 6371
+    let kokonaisMatka = 0 
+    const rad = 0.0174533
+    console.log("koodrilista: " +coordList)
+
+    if(coordList.length < 1 ) return 0 //error check, pistetään palauttamaan 0, jos liian lyhyt lista
+
+    for(let iteration = 0; iteration < 1; iteration++)
+    {
+        let lat1 = coordList[iteration].lat
+        let lng1 = coordList[iteration].lng
+
+        let lat2 = coordList[iteration+1].lat
+        let lng2 = coordList[iteration+1].lng
+
+        console.log("lat1:", lat1)
+        console.log("lng1:", lng2)
+        console.log("lat2:", lat2)
+         console.log("lng2:", lng2)
+
+        //let laskettuMatka = 2 * MaanRadius * Math.asin(Math.sqrt((Math.pow(Math.sin(((lat2 - lat1) / 2) + Math.cos(lat1) * Math.cos(lat2) * Math.pow(((lng2 - lng1) / 2), 2)), 2) / 2)))
+        let laskettuMatka = 2 * MaanRadius * Math.asin(Math.sqrt(Math.pow(Math.sin(((lat2*rad - lat1*rad) / 2)), 2) + Math.cos(lat1*rad) * Math.cos(lat2*rad) * Math.pow(Math.sin(lng2*rad - lng1*rad), 2) / 2))
+        console.log("LASKETTUMATKA: "+laskettuMatka)
+
+        kokonaisMatka += laskettuMatka
+
+    }
+
+    return kokonaisMatka
+}
