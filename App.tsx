@@ -8,13 +8,18 @@ import { Koti } from './screens/Koti';
 import { Juoksu } from './screens/Juoksu';
 import { Profiili } from './screens/Profiili';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Sali } from './screens/Sali';
-import { Ohjelma } from './screens/Ohjelma';
+import { useEffect, useState } from 'react';
+import { Database } from './Database/Database';
+import * as SQLite from 'expo-sqlite';
+import { UserData } from './types/database';
 
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export default function App() {
+
+  //const [db, setDb] = useState<SQLite.SQLiteDatabase | null>(null);
+  //const [userData, setUserData] = useState<UserData[]>([])
 
   return (  
     <NavigationContainer>
@@ -41,6 +46,6 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#550505',
+    backgroundColor: '#ffffff',
   },
 });
