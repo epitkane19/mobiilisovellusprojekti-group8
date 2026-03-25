@@ -12,6 +12,7 @@ const sivut = [
     { label: 'Koti', value: 'Koti' },
     { label: 'Kartta', value: 'Kartta' },
     { label: 'Profliili', value: 'Profiili' },
+    { label: 'Sali', value: 'Sali'},
   ];
 
 export function CustomNavigationBar({navigation, route, options, back }: Props) 
