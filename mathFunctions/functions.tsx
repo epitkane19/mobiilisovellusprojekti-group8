@@ -1,3 +1,4 @@
+import { coordType } from "../types/coordType"
 
 
 
@@ -44,3 +45,35 @@ export function laskeJuoksujenAvgMatka(juoksut:number[]):number // ottaa paramet
         }
         return Number(avgMatkaKilometrit.toFixed(2)) //palautetaan matka kilometreinä
 }
+
+export function LaskeMatkaKoordinaateista(coordArr: coordType[]):number
+{
+    const R = 6371.0 //maan radius
+    let kokonaisMatka:number = 0
+
+    for(let iteraatiot = 0; iteraatiot < coordArr.length-1; iteraatiot++){
+
+    let lat1 = coordArr[iteraatiot].lat * Math.PI / 180 //muutetaan radiaaneiksi heti
+    let lng1 = coordArr[iteraatiot].lng * Math.PI / 180
+
+    let lat2 = coordArr[iteraatiot+1].lat * Math.PI / 180
+    let lng2 = coordArr[iteraatiot+1].lng * Math.PI / 180
+
+    let deltalat = (lat2 - lat1) // deltalatitude, eli leveyspiirin muutos
+    let deltalng = (lng2 - lng1) // deltaaltitude, eli korkeuspiirin muutos    
+    
+    let a = Math.sin(deltalat / 2)**2 + 
+            Math.cos(lat1) * Math.cos(lat2) *
+            Math.sin(deltalng / 2)**2
+
+    let c = 2 * Math.atan2( Math.sqrt(a), Math.sqrt(1-a))
+    let kumulatiivinenMatka = R * c
+
+    kokonaisMatka += kumulatiivinenMatka
+
+    console.log(kokonaisMatka)
+    }
+    return kokonaisMatka
+}
+
+

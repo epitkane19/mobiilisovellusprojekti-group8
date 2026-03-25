@@ -33,7 +33,7 @@ export default function App() {
         }}>
           
         <Stack.Screen name="Koti" component={Koti} />
-        <Stack.Screen name="Juoksu" component={Juoksu} />
+        <Stack.Screen name="Kartta" component={Kartta} />
         <Stack.Screen name="Profiili" component={Profiili}  />
         <Stack.Screen name="Sali" component={Sali} />
       </Stack.Navigator>
