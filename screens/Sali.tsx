@@ -1,14 +1,17 @@
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React from 'react'
+import React, { useState } from 'react'
 import { RootStackParamList } from '../types/navigation'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { useNavigation } from '@react-navigation/native'
+import { OhjelmaModal } from '../components/OhjelmaModal'
 
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Sali'>
 
 
 export function Sali({ route }: Props) {
+      const [modalVisible, setModalVisible] = useState(false);
+    
     return (
         <View style={styles.kontti}>
             <TouchableOpacity style={styles.päivärivi}>
@@ -41,11 +44,13 @@ export function Sali({ route }: Props) {
             </TouchableOpacity>
             
 
-            <TouchableOpacity style={styles.uusiTreeni}
-            onPress={()=>("")}
-            >
-                <Text>Luo uusi</Text>
-                </TouchableOpacity>
+            
+                <OhjelmaModal
+                    modalVisible={modalVisible}
+                    setModalVisible={setModalVisible}
+                    db={null}                          
+                      ></OhjelmaModal>  
+                
             
 
         </View>

@@ -12,6 +12,8 @@ import { useEffect, useState } from 'react';
 import { Database } from './Database/Database';
 import * as SQLite from 'expo-sqlite';
 import { UserData } from './types/database';
+import { Sali } from './screens/Sali';
+import { Ohjelma } from './screens/Ohjelma';
 
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
