@@ -1,10 +1,18 @@
 import * as SQLite from 'expo-sqlite';
+import { Jogdata } from './JogData';
 
 export type ProfiiliModalProps=
 {
   modalVisible: boolean
   setModalVisible: (React.Dispatch<React.SetStateAction<boolean>>)
   db: SQLite.SQLiteDatabase | null
+}
+
+export type KarttaModalProps=
+{
+  ChartsVisible: boolean
+  setChartsVisible: (React.Dispatch<React.SetStateAction<boolean>>)
+  JogDataArr: Jogdata[]
 }
 
 export type LuoProfiiliModalProps=
