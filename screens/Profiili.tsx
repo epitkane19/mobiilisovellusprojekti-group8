@@ -8,8 +8,9 @@ import { LuoProfiiliValikkoModal } from '../components/LuoProfiiliModal';
 import * as SQLite from 'expo-sqlite';
 import { Database, purgeDb } from '../Database/Database';
 import { horizontalScale } from '../mathFunctions/FonttiSkaalaaja';
-import { UserData } from '../types/database';
+import { UserData, UserWeight } from '../types/database';
 import { Dropdown } from 'react-native-element-dropdown';
+import { ChartsModal } from '../components/ChartsModal';
 
 const { width, height } = Dimensions.get("window");
 
@@ -23,21 +24,74 @@ const sivut = [
     { label: 'Profliili', value: 'Profiili' },
   ];
 
+    const testiObjekti = 
+{
+    Time: 60,
+    distanceJogged: 11,
+    date: "14/01/2025"
+}
+const dummyData = 
+[
+
+]
+const dummyData2 = 
+[
+  {
+    Time: 55,
+    distanceJogged: 9,
+    date: "10/01/2025"
+  },
+  {
+    Time: 67,
+    distanceJogged: 10,
+    date: "11/01/2025"
+  },
+   {
+    Time: 56,
+    distanceJogged: 12,
+    date: "12/01/2025"
+  },
+  {
+    Time: 60,
+    distanceJogged: 11,
+    date: "13/01/2025"
+  },
+  
+   {
+    Time: 56,
+    distanceJogged: 12,
+    date: "15/01/2025"
+  },
+  {
+    Time: 71,
+    distanceJogged: 11,
+    date: "17/01/2025"
+  },
+  {
+    Time: 66,
+    distanceJogged: 11,
+    date: "19/01/2025"
+  },
+]
+
+
 export function Profiili({ route }: Props) {
 
    useEffect(() => {
-          Database({db, setDb, setUserData}) // useeffectilla ladataan db, eli tietokanta usetstate muuttujaan
+          Database({db, setDb, setUserData, setUserWeight}) // useeffectilla ladataan db, eli tietokanta usetstate muuttujaan
           //purgeDb(db)
         }, []);
 
   const [modalVisible, setModalVisible] = useState(false);
+  const [ChartsVisible, setChartsVisible] = useState(false);
   const [Infogiven, setInfogiven] = useState(false) //refreshiä varten, tällä checkillä saadaan sivu latautumaan uudelleen tietojen asettamisen jälkeen
   const [db, setDb] = useState<SQLite.SQLiteDatabase | null>(null);
   const [userData, setUserData] = useState<UserData[]>([])
+  const [UserWeight, setUserWeight] = useState<UserWeight[]>([])
   
     if(Infogiven)
     {
-      Database({db, setDb, setUserData})
+      Database({db, setDb, setUserData, setUserWeight})
       setInfogiven(false)
     }
 
@@ -96,7 +150,7 @@ return (
                               </View>
 
                               <View style={styles.textRow}>                    
-                                <Text  style= {styles.textName}> {userData[0].Weight_Kg} kg </Text>
+                                <Text  style= {styles.textName}> {UserWeight[0].Weight_Kg} kg </Text>
                               </View>
                        
                           </View>  
@@ -107,25 +161,28 @@ return (
           modalVisible= {modalVisible}
           setModalVisible={setModalVisible}
           db={db}
-      ></ProfiiliValikkoModal>   
+      ></ProfiiliValikkoModal> 
 
-        <Dropdown style={styles.navBox}
-            
-          data={sivut}
-          maxHeight={height-height/20}
-          placeholderStyle={styles.itemtext}
-          selectedTextStyle={styles.itemtext}
-          iconColor={'#ffffff'}
-          itemTextStyle={styles.itemtext}
-          itemContainerStyle={styles.list}
-          labelField="label"
-          valueField="value"
-          placeholder={'Tilastot'}
-          onChange={item => {} }
-       >
-       </Dropdown>               
+      <ChartsModal
+        ChartsVisible= {ChartsVisible}
+        setChartsVisible={setChartsVisible}
+        JogDataArr= {dummyData2}>       
+      </ChartsModal> 
 
-           
+      <View style={styles.PressableContainer}>
+        <Pressable
+         style= {styles.Pressable} 
+          onPress={() => setChartsVisible(true)}>
+          <Text style={styles.textClose}>Lenkit 7vrk</Text>
+        </Pressable>
+
+        <Pressable
+         style= {styles.Pressable} 
+          onPress={() => console.log("")}>
+          <Text style={styles.textClose}>Paino</Text>
+        </Pressable>     
+      </View> 
+                     
           </View>             
           
       </View>
@@ -226,6 +283,34 @@ textName:
     margin: width/20,
     flexDirection: 'column',
     alignContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    height: height/1.8
+  },
+  textClose: 
+  {
+    fontSize: horizontalScale(16),
+    fontWeight: 'bold'
+  },
+  Pressable: 
+  {
+    backgroundColor: '#ffffff',
+    borderRadius: 10,
+    height: height/20,
+    width: width/3,
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 2,
+    elevation: 5,
+  },
+  PressableContainer: 
+  {
+    flex: 1,
+    flexDirection: 'row',
+    gap: width/10,
   },
 })

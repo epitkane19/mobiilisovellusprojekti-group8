@@ -9,10 +9,10 @@ const { width, height } = Dimensions.get("window");
 export function LuoProfiiliValikkoModal({modalVisible, setModalVisible, db, setInfogiven}: LuoProfiiliModalProps) {
   
     const [etuNimi, setEtunimi] = useState<string>("")
-    const [sukuNimi, setsukunimi] = useState("")
-    const [ikä, setikä] = useState("")
-    const [paino, setPaino] = useState("")
-    const [pituus, setPituus] = useState("")
+    const [sukuNimi, setsukunimi] = useState<string>("")
+    const [ikä, setikä] = useState<string>("")
+    const [paino, setPaino] = useState<string>("")
+    const [pituus, setPituus] = useState<string>("")
 
 function luoProfiili()
 {

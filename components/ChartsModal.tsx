@@ -1,53 +1,33 @@
 import React, {useState} from 'react';
 import { Modal, StyleSheet, Text, Pressable, View, Dimensions, TextInput, Button } from 'react-native';
-import { ProfiiliModalProps } from '../types/ModalProps'; 
+import { KarttaModalProps } from '../types/ModalProps'; 
 import { horizontalScale } from '../mathFunctions/FonttiSkaalaaja';
+import { MyChart } from './chart';
 
 const { width, height } = Dimensions.get("window");
 
-export function ProfiiliValikkoModal({modalVisible, setModalVisible}: ProfiiliModalProps) {
+export function ChartsModal({ChartsVisible, setChartsVisible, JogDataArr}: KarttaModalProps) {
+
+function resetoiModal()
+{
+    JogDataArr = [] //poistetaan array data jotta tulee uudelleen renderöinti
+    setChartsVisible(false)
+}
 
   return (
     <View style={styles.containerAsButton}> 
-      <Pressable
-                style= {styles.Pressable2} 
-                onPress={() => setModalVisible(true)}>
-         <Text style={styles.textPressable}>Muokkaa</Text>
-      </Pressable>
-      
        <Modal
         animationType="slide"
-        visible={modalVisible}>
+        visible={ChartsVisible}>
 
           <View style={styles.modalView}>
-                <View style={styles.flex}>
-
-                    <TextInput
-                    style= {styles.textinput}
-                    placeholder='Anna painosi:'>    
-                    </TextInput>
-
-                    <TextInput
-                    style= {styles.textinput}
-                    placeholder='Anna pituutesi:'>
-                    </TextInput>
-
-                    <TextInput
-                    style= {styles.textinput}
-                    placeholder='Anna ikäsi:'>
-                    </TextInput>
-            </View>
+                <MyChart jogDataArr={JogDataArr}>
                 
-            <View style={styles.PressableContainer}>   
+                </MyChart>           
+            <View style={styles.PressableContainer}>    
                 <Pressable
                 style= {styles.Pressable} 
-                onPress={() => setModalVisible(false)}>
-                    <Text style={styles.textPressableBlack}>Tallenna tietosi</Text>
-                </Pressable>
-
-                <Pressable
-                style= {styles.Pressable} 
-                onPress={() => setModalVisible(false)}>
+                onPress={() => resetoiModal()}>
                     <Text style={styles.textPressableBlack}>Sulje modal</Text>
                 </Pressable>     
             </View>
@@ -105,6 +85,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     gap: width/10,
+    marginBottom: width/5
   },
   Pressable: 
   {
@@ -113,7 +94,7 @@ const styles = StyleSheet.create({
     height: height/20,
     width: width/3,
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'center'
   },
    Pressable2: 
   {
@@ -127,13 +108,11 @@ const styles = StyleSheet.create({
   modalView: 
   {
     gap: height/20,
-    height: height/2.5,
-    marginTop: height/10,
-    margin: width/15,
+    marginTop: height/5,
     backgroundColor: '#9F6BFB',
     borderRadius: 20,
     padding: width/15,
-    alignItems: 'flex-start',
+    alignItems: 'center',
     shadowColor: '#000',
     shadowOffset: {
       width: 0,

@@ -1,11 +1,11 @@
 import * as SQLite from 'expo-sqlite';
-import { DbProps, UserData } from '../types/database';
+import { DbProps, UserData, UserWeight } from '../types/database';
 
-export function Database({db, setDb, setUserData}: DbProps)
+export function Database({db, setDb, setUserData, setUserWeight}: DbProps)
 {
     
     const initDB = async () => {
-    const database = await SQLite.openDatabaseAsync('JogAppDb1dev.db');
+    const database = await SQLite.openDatabaseAsync('JogAppDb3dev.db');
     setDb(database);
 
       await database.execAsync(`
@@ -13,16 +13,22 @@ export function Database({db, setDb, setUserData}: DbProps)
           UserID INTEGER PRIMARY KEY,
           FirstName TEXT NOT NULL,
           LastName TEXT NOT NULL,
-          Weight_Kg REAL NOT NULL CHECK (Weight_kg >= 0),
           Height_Cm REAL NOT NULL CHECK (Height_Cm >= 0),
-          Age INTEGER NOT NULL CHECK (Age >= 0),
-          Date TIMESTAMP NOT NULL
+          Age INTEGER NOT NULL CHECK (Age >= 0)
+        );
+        CREATE TABLE IF NOT EXISTS UserWeight (
+          UserDataID INTEGER PRIMARY KEY AUTOINCREMENT,
+          UserID INTEGER NOT NULL, 
+          Weight_Kg REAL NOT NULL CHECK (Weight_kg >= 0),
+          Date TIMESTAMP NOT NULL,
+          FOREIGN KEY(UserID) REFERENCES UserData(UserID) ON DELETE CASCADE
         );
         CREATE TABLE IF NOT EXISTS JogData (
           JogDataID INTEGER PRIMARY KEY AUTOINCREMENT,
           UserID INTEGER NOT NULL, 
           length_Km REAL NOT NULL CHECK (length_Km >= 0),
           Time_Minutes REAL NOT NULL CHECK (Time_Minutes >= 0),
+          Jog_Date TIMESTAMP NOT NULL,
           FOREIGN KEY(UserID) REFERENCES UserData(UserID) ON DELETE CASCADE
         );
         CREATE TABLE IF NOT EXISTS GymData (
@@ -38,22 +44,29 @@ export function Database({db, setDb, setUserData}: DbProps)
       `);
 
 
-      loadUserData(database, setUserData);
+      loadUserData(database, setUserData, setUserWeight);
     };
     initDB();
 }
 
-const loadUserData = async (database: SQLite.SQLiteDatabase, setUserData: React.Dispatch<React.SetStateAction<UserData[]>>) => {
+const loadUserData = async (
+  database: SQLite.SQLiteDatabase, 
+  setUserData: React.Dispatch<React.SetStateAction<UserData[]>>,
+  setUserRecords: React.Dispatch<React.SetStateAction<UserWeight[]>>) => 
+  {
    
     const sql = database.sql
     const userDataArr = await sql<UserData>`SELECT * FROM UserData ORDER BY UserID DESC`;
+    const userRecords = await sql<UserWeight>`SELECT * FROM UserWeight ORDER BY UserID DESC`;
     console.log(userDataArr)
     setUserData(userDataArr)
+    setUserRecords(userRecords)
   };
 export const AddProfile = async (etuNimi: string, sukuNimi: string, ikä: string, paino: string, pituus: string, db: SQLite.SQLiteDatabase | null) => {
     
   if (!db) return;
-    const result = await db.runAsync('INSERT INTO UserData (UserID, FirstName, LastName, Weight_Kg, Height_Cm, Age, Date) VALUES (1,?,?,?,?,?, date())', etuNimi, sukuNimi, paino, pituus, ikä) 
+    const resultData = await db.runAsync('INSERT INTO UserData (UserID, FirstName, LastName, Age, Height_Cm) VALUES (1,?,?,?,?)', etuNimi, sukuNimi, ikä, pituus)
+    const resultWeight = await db.runAsync('INSERT INTO UserWeight (UserID, Weight_Kg, Date) VALUES (1,?, date())', paino)  
     //kovakoodataan userid 1, niin ei voi missään tapauksessa muodostua dublikaatti recordeja ja voi olla ainoastaan 1 käyttäjä.
   };
 
