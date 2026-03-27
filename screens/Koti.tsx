@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import {View, Text, StyleSheet, Button} from 'react-native';
+<<<<<<< HEAD
 import { laskeAvgNopeus, laskeLenkinKalorit, laskeJuoksujenAvgMatka, laskeKoordinaatitKilometreiksi } from '../mathFunctions/functions';
+=======
+import { laskeAvgNopeus, laskeLenkinKalorit, laskeJuoksujenAvgMatka, LaskeMatkaKoordinaateista } from '../mathFunctions/functions';
+>>>>>>> fad83e3fb0d8c190a94051ccc940153376142735
 import { Database } from '../Database/Database';
 import { UserData } from '../types/database';
 import * as SQLite from 'expo-sqlite';
@@ -13,16 +17,16 @@ interface coordlist
 
 export function Koti() {
 
-  const dummyarr =
+  const dummydata = 
 [
-{"lat": 65.0608024, "lng": 25.4661418}, 
-{"lat": 49.2125578, "lng": 16.62662018}
-]
-
-const dummyarr2 =
-[
-{"lat": 65.007350, "lng": 25.470208}, 
-{"lat": 65.015101, "lng": 25.466268}
+    {"lat": 65.001916 ,"lng": 25.454775},
+    {"lat": 65.016146 ,"lng": 25.483967},
+    {"lat": 65.021916 ,"lng": 25.455775},
+    {"lat": 65.036146 ,"lng": 25.486967},
+    {"lat": 65.041916 ,"lng": 25.457775},
+    {"lat": 65.056146 ,"lng": 25.488967},
+    {"lat": 65.061916 ,"lng": 25.494775},
+    {"lat": 65.076146 ,"lng": 25.500000},
 ]
 
   const[TempResult, setTempResult] = useState(0) //hävitä myöhemmin tämä, testiä varten
@@ -37,8 +41,8 @@ const dummyarr2 =
   return (
     <View style={style.container}>
       <Button
-      onPress={() => setTempResult(laskeKoordinaatitKilometreiksi(dummyarr2))}
-      title="laskettu matka"
+      onPress={() => setTempResult(LaskeMatkaKoordinaateista(dummydata))}
+      title="avg nopeus testi (5 sekuntia 14 metriä"
       color="#841584"
       ></Button>
       <Button
