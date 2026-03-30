@@ -4,7 +4,7 @@ import { coordType } from "../types/coordType"
 
 export function laskeAvgNopeus(t0: number, t1:number, x0: number, x1:number):number // yksiköt ovat sekunteja ja metrejä
 {
-    return Number(((x1 - x0) / (t1 - t0)).toFixed(2))
+    return parseFloat(((x1 - x0) / (t1 - t0)).toFixed(2))
 }
 
 export function laskeLenkinKalorit(painoKilogrammoina:number, Minuutit:number, keskinopeusMPS:number,):number
@@ -76,7 +76,7 @@ export function LaskeMatkaKoordinaateista(coordArr: coordType[]):number
 
     //console.log(kokonaisMatka)
     }
-    return Number(kokonaisMatka.toFixed(2))
+    return parseFloat(kokonaisMatka.toFixed(2))
 }
 
 

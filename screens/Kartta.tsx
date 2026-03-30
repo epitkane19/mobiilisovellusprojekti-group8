@@ -1,8 +1,9 @@
 import React, { useEffect, useRef, useCallback, useState } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Text, Pressable } from 'react-native';
 import { WebView } from 'react-native-webview';
 import * as Location from 'expo-location';
 import { leafletHtml } from '../components/leaflet';
+import { laskeAvgNopeus, LaskeMatkaKoordinaateista } from '../mathFunctions/functions'
 
 interface coordInterface {
     lat: number;
@@ -12,8 +13,13 @@ interface coordInterface {
 export function Kartta() {
     const webviewRef = useRef<WebView | null>(null);
     const trackingRef = useRef<NodeJS.Timeout | null>(null);
-    const [coordList, setCoordList] = useState<Array<coordInterface>>([])
-    const [trackedJog, setTrackedJog] = useState<Array<coordInterface>>([])
+    const [coordList, setCoordList] = useState<Array<coordInterface>>([]);
+    const [trackedJog, setTrackedJog] = useState<Array<coordInterface>>([]);
+    const [distance, setDistance] = useState<number>(0);
+    const [fromStartAvgSpd, setFromStartAvgSpd] = useState<number>(0);
+    const [avgSpd, setAvgSpd] = useState<number>(0);
+    const [spdText, setSpdText] = useState(false);
+    const [timeList, setTimeList] = useState<number[]>([]);
 
     useEffect(() => {
         (async () => {
@@ -22,15 +28,34 @@ export function Kartta() {
     }, []);
 
     useEffect(() => {
-        if(coordList.length > 0 ) {
-            console.log("koordinaatit:", coordList);
+        if(coordList.length < 2 ) {
+            return;
         } 
+
+        console.log("koordinaatit:", coordList)
+
+        setDistance(LaskeMatkaKoordinaateista(coordList))
+
+        const coordLength = coordList.length;
+
+        const t0 = timeList[coordLength - 2];
+        const t1 = timeList[coordLength - 1];
+        const x0 = LaskeMatkaKoordinaateista(coordList.slice(0, coordLength - 1));
+        const x1 = distance;
+
+        setAvgSpd(laskeAvgNopeus(t0, t1, x0, x1));
+
+        setFromStartAvgSpd(laskeAvgNopeus(timeList[0], t1, 0, x1))
+
     }, [coordList]);
 
     useEffect(() => {
-        if(trackedJog.length > 0 ) {
-            console.log("viime juoksu:", trackedJog);
+        if(trackedJog.length < 2 ) {
+            return;
         }
+
+        console.log("viime juoksu:", trackedJog);
+
     }, [trackedJog]);
 
     const sendLocationToWebView = useCallback(async () => {
@@ -42,9 +67,8 @@ export function Kartta() {
                 lng: position.coords.longitude,
             };
 
-            
-
             setCoordList(prev => [...prev, coords]);
+            setTimeList(prev => [...prev, Date.now() / 1000]);
 
             webviewRef.current?.postMessage(JSON.stringify(coords));
 
@@ -69,7 +93,6 @@ export function Kartta() {
         }
 
         if (data === 'stop-tracking') {
-              console.log("STOPPING — coordList at stop:", coordList);
             if (trackingRef.current) {
                 clearInterval(trackingRef.current);
                 trackingRef.current = null;
@@ -81,6 +104,16 @@ export function Kartta() {
 
     return (
         <View style={styles.container}>
+            <Pressable onPress={() => setSpdText(prev => !prev ) }>
+                <View style={styles.numberContainer}>
+                    <Text style={styles.teksti}>
+                        {spdText ? `Keskinopeus alusta: ${fromStartAvgSpd}` : `Keskinopeus: ${avgSpd}`}
+                    </Text>
+                </View>
+            </Pressable>
+            <View style={styles.numberContainerBottom}>
+                <Text style={styles.teksti}>Matka: {distance}</Text>
+            </View>
             <WebView
                 ref={webviewRef}
                 originWhitelist={['*']}
@@ -97,4 +130,19 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#fff',
     },
+    numberContainer: {
+        marginTop: 10,
+        marginBottom: 10,
+        marginLeft: 10,
+        backgroundColor: '#fff',
+    },
+    numberContainerBottom: {
+        marginTop: 10,
+        marginBottom: 10,
+        marginLeft: 10,
+        backgroundColor: '#fff',
+    },
+    teksti: {
+        fontSize: 30
+    }
 });
