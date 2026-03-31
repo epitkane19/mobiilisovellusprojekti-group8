@@ -13,6 +13,7 @@ interface coordInterface {
 export function Kartta() {
     const webviewRef = useRef<WebView | null>(null);
     const trackingRef = useRef<NodeJS.Timeout | null>(null);
+    const timeRef = useRef<NodeJS.Timeout | null>(null);
     const [coordList, setCoordList] = useState<Array<coordInterface>>([]);
     const [trackedJog, setTrackedJog] = useState<Array<coordInterface>>([]);
     const [distance, setDistance] = useState<number>(0);
@@ -20,6 +21,9 @@ export function Kartta() {
     const [avgSpd, setAvgSpd] = useState<number>(0);
     const [spdText, setSpdText] = useState(false);
     const [timeList, setTimeList] = useState<number[]>([]);
+    const [time, setTime] = useState(0)
+    const startTime = Date.now()
+    let currentTime = 0;
 
     useEffect(() => {
         (async () => {
@@ -32,7 +36,7 @@ export function Kartta() {
             return;
         } 
 
-        console.log("koordinaatit:", coordList)
+        //console.log("koordinaatit:", coordList)
 
         setDistance(LaskeMatkaKoordinaateista(coordList))
 
@@ -43,9 +47,18 @@ export function Kartta() {
         const x0 = LaskeMatkaKoordinaateista(coordList.slice(0, coordLength - 1));
         const x1 = distance;
 
+        console.log("t0: ", t0)
+        console.log("t1: ", t1)
+        console.log("x0: ", x0)
+        console.log("x1: ", x1)
+
         setAvgSpd(laskeAvgNopeus(t0, t1, x0, x1));
 
         setFromStartAvgSpd(laskeAvgNopeus(0, t1, 0, x1))
+
+        console.log("nopeus tällä hetkellä: ", avgSpd)
+        console.log("nopeus alusta asti tähän hetkeen: ", fromStartAvgSpd)
+        console.log("matka tällä hetkellä: ", distance)
 
     }, [coordList]);
 
@@ -54,7 +67,7 @@ export function Kartta() {
             return;
         }
 
-        console.log("viime juoksu:", trackedJog);
+        //console.log("viime juoksu:", trackedJog);
 
     }, [trackedJog]);
 
@@ -67,8 +80,11 @@ export function Kartta() {
                 lng: position.coords.longitude,
             };
 
+            
+
             setCoordList(prev => [...prev, coords]);
-            setTimeList(prev => [...prev, Date.now() / 1000]);
+            setTimeList(prev => [...prev, currentTime]);
+
 
             webviewRef.current?.postMessage(JSON.stringify(coords));
 
@@ -90,6 +106,10 @@ export function Kartta() {
             trackingRef.current = setInterval(() => {
                 sendLocationToWebView();
             }, 3000);
+
+            timeRef.current = setInterval(() => {
+                HandleTime();
+            }, 1000)
         }
 
         if (data === 'stop-tracking') {
@@ -97,10 +117,23 @@ export function Kartta() {
                 clearInterval(trackingRef.current);
                 trackingRef.current = null;
             }
+            if (timeRef.current) {
+                clearInterval(timeRef.current);
+                timeRef.current = null;
+            }
+            
             setTrackedJog(coordList);
             setCoordList([]);
+            console.log("aikalista: ", time)
+            //setTime(0)
         }
     }, [sendLocationToWebView, coordList]);
+
+    function HandleTime() {
+        currentTime = (Date.now() - startTime) / 1000
+        console.log("aikaa: ", currentTime )
+    }
+
 
     return (
         <View style={styles.container}>
