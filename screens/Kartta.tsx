@@ -45,7 +45,7 @@ export function Kartta() {
 
         setAvgSpd(laskeAvgNopeus(t0, t1, x0, x1));
 
-        setFromStartAvgSpd(laskeAvgNopeus(timeList[0], t1, 0, x1))
+        setFromStartAvgSpd(laskeAvgNopeus(0, t1, 0, x1))
 
     }, [coordList]);
 
