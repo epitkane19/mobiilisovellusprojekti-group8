@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import {View, Text, StyleSheet, Button} from 'react-native';
 import { laskeAvgNopeus, laskeLenkinKalorit, laskeJuoksujenAvgMatka, LaskeMatkaKoordinaateista } from '../mathFunctions/functions';
 import { Database } from '../Database/Database';
-import { UserData } from '../types/database';
+import { UserData, UserWeight } from '../types/database';
 import * as SQLite from 'expo-sqlite';
 
 interface coordlist 
@@ -28,9 +28,10 @@ export function Koti() {
   const[TempResult, setTempResult] = useState(0) //hävitä myöhemmin tämä, testiä varten
   const [db, setDb] = useState<SQLite.SQLiteDatabase | null>(null);
   const [userData, setUserData] = useState<UserData[]>([])
+  const [UserWeight, setUserWeight] = useState<UserWeight[]>([])
 
   useEffect(() => {
-            Database({db, setDb, setUserData}) // useeffectilla ladataan db, eli tietokanta usetstate muuttujaan
+            Database({db, setDb, setUserData, setUserWeight}) // useeffectilla ladataan db, eli tietokanta usetstate muuttujaan
           }, []);
   
 

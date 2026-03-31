@@ -1,59 +1,28 @@
-import { View } from "react-native";
+import { Dimensions, View } from "react-native";
 import { CartesianChart, Line } from "victory-native";
 import {useFont } from "@shopify/react-native-skia";
+import { chartProps } from "../types/ChartProps";
+import { useEffect } from "react";
 
-export function MyChart() {
+const { width, height } = Dimensions.get("window");
+
+
+export function MyChart({jogDataArr}: chartProps) {
+  
   
   const inter = require("../roboto.ttf"); 
-  const fontti = useFont(inter, 12)
-
-const testiObjekti = 
-{
-  x:7,
-  y:10
-}
-const dummyData = 
-[
-  {
-    x: 1,
-    y: 25
-  },
-  {
-    x: 2,
-    y: 30
-  }
-  ,
-  {
-    x: 3,
-    y: 35
-  }
-  ,
-  {
-    x: 4,
-    y: 36
-  }
-  ,
-  {
-    x: 5,
-    y: 39
-  }
-  ,
-  {
-    x: 6,
-    y: 52
-  }
-]
-dummyData.push(testiObjekti)
+  const fontti = useFont(inter, 12)  
 
   return (
-    <View style={{ height: 250, width: 350, backgroundColor: '#c9afaf', padding: 20}}>
+    <View style={{ height: height/2.5, width: width/1.1, backgroundColor: '#e2d1ff', padding: 20}}>
       <CartesianChart
-        data={dummyData} 
-        xKey="x" 
-        yKeys={["y"]} 
+        data={jogDataArr} 
+        xKey="date" 
+        yKeys={["distanceJogged"]}    
         domainPadding={{top: 30, bottom: 30}}
         axisOptions={{
-          labelColor: '#815151',
+          tickCount: jogDataArr.length,
+          labelColor: '#ff1a1a',
           font: fontti
         }}
         
@@ -61,7 +30,7 @@ dummyData.push(testiObjekti)
         {}
         {({ points }) => (
           <Line 
-          points={points.y} 
+          points={points.distanceJogged} 
           color="red" strokeWidth={3}
           animate={{ type: "timing", duration: 500 }} />
         )}
