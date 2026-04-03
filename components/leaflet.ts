@@ -73,6 +73,10 @@ document.addEventListener("message", function(event) {
     } else {
       logToRN("WebView event error: " + event.data);
     }
+    
+    if (data.type === "coord-list") {
+      const latlngs = data.coords.map(c => [c.lat, c.lng]);
+    }
   } catch (e) {
     logToRN("WebView JSON parsetus epäonnistui: " + e.message + event.data);
   }
@@ -127,11 +131,14 @@ startTrackingButton.onAdd = function () {
 
     if (isTracking) {
       div.innerHTML = "Lopeta Juoksu";
-      logToRN("request-location");
       logToRN("start-tracking");
+      logToRN("request-location");
     } else {
       div.innerHTML = "Aloita Juoksu";
       logToRN("stop-tracking");
+
+      var polyline = L.polyline(latlngs, {color: 'red', weight: 4}).addTo(map);
+      map.fitBounds(polyline.getBounds());
     }
   };
     

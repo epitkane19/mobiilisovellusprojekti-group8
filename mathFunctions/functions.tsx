@@ -60,7 +60,7 @@ export function LaskeMatkaKoordinaateista(coordArr: coordType[]):number
     let lat2 = coordArr[iteraatiot+1].lat * Math.PI / 180
     let lng2 = coordArr[iteraatiot+1].lng * Math.PI / 180
 
-    console.log("lat1 " + lat1 + " " + "lat2 " + lat2 + " " + "lng1 " + lng1 + " " + "lng2 " + lng2 + " " + iteraatiot)
+    //console.log("lat1 " + lat1 + " " + "lat2 " + lat2 + " " + "lng1 " + lng1 + " " + "lng2 " + lng2 + " " + iteraatiot)
 
     let deltalat = (lat2 - lat1) // deltalatitude, eli leveyspiirin muutos
     let deltalng = (lng2 - lng1) // deltaaltitude, eli korkeuspiirin muutos    
