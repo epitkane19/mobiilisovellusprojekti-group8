@@ -9,9 +9,9 @@ import { loadGymData } from '../Database/Database';
 
 const { width, height } = Dimensions.get("window");
 
-export function LiikeListaModal({ modalVisible, setModalVisible, db }: LiikeListaModalProps) {
+export function LiikeListaModal({ modalVisibleLiikeLista, setModalVisibleLiikeLista, db }: LiikeListaModalProps) {
 
-  const [modalVisible1, setModalVisible1] = useState(false);
+  const [modalVisibleLiike, setModalVisibleLiike] = useState(false);
   const [gymExerList, setgymExerList] = useState<Exercise[]>([])
   const numerotest = 1
 
@@ -23,13 +23,13 @@ export function LiikeListaModal({ modalVisible, setModalVisible, db }: LiikeList
     <View>
       <Pressable
 
-        onPress={() => setModalVisible(true)}>
+        onPress={() => setModalVisibleLiikeLista(true)}>
         <Text style={styles.modalNappi}>Liikkeet</Text>
       </Pressable>
 
       <Modal
         animationType="slide"
-        visible={modalVisible}>
+        visible={modalVisibleLiikeLista}>
 
         <View style={styles.ohjelmaModal}>
 
@@ -43,20 +43,15 @@ export function LiikeListaModal({ modalVisible, setModalVisible, db }: LiikeList
           />
 
           <View style={styles.modalNappiRivi}>
+            
             <Pressable
-
-              onPress={() => setModalVisible(false)}>
-              <Text style={styles.modalNapit}>Tallenna</Text>
-            </Pressable>
-
-            <Pressable
-              onPress={() => setModalVisible(false)}>
+              onPress={() => setModalVisibleLiikeLista(false)}>
               <Text style={styles.modalNapit}>Sulje</Text>
             </Pressable>
 
             <LiikeModal
-              modalVisible1={modalVisible1}
-              setModalVisible1={setModalVisible1}
+              modalVisibleLiike={modalVisibleLiike}
+              setModalVisibleLiike={setModalVisibleLiike}
               db={db}
 
             ></LiikeModal>

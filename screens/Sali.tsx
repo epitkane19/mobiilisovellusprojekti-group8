@@ -7,7 +7,7 @@ import { PäiväModal } from '../components/PäiväModal'
 import { Database, purgeDb } from '../Database/Database'
 import * as SQLite from 'expo-sqlite';
 import { UserData, UserWeight } from '../types/database';
-import { TreeniModal } from '../components/TreeniModal'
+import { TreeniListaModal } from '../components/TreeniListaModal'
 import { LiikeListaModal } from '../components/LiikeListaModal'
 
 
@@ -20,9 +20,9 @@ export function Sali({ route }: Props) {
         Database({ db, setDb, setUserData, setUserWeight }) // useeffectilla ladataan db, eli tietokanta usetstate muuttujaan
         //purgeDb(db)
     }, []);
-    const [modalVisible, setModalVisible] = useState(false);
+    const [modalVisibleLiikeLista, setModalVisibleLiikeLista] = useState(false);
     const [modalVisiblepv, setModalVisiblepv] = useState(false);
-    const [modalVisibleTreeni, setModalVisibleTreeni] = useState(false);
+    const [modalVisibleTreeniLista, setModalVisibleTreeniLista] = useState(false);
 
     const [db, setDb] = useState<SQLite.SQLiteDatabase | null>(null);
     const [userData, setUserData] = useState<UserData[]>([])
@@ -41,16 +41,16 @@ export function Sali({ route }: Props) {
             </PäiväModal>
             <View style={styles.modalNappiRivi}>
             <LiikeListaModal
-                modalVisible={modalVisible}
-                setModalVisible={setModalVisible}
+                modalVisibleLiikeLista={modalVisibleLiikeLista}
+                setModalVisibleLiikeLista={setModalVisibleLiikeLista}
                 db={db}
             ></LiikeListaModal>
 
-            <TreeniModal
-                modalVisibleTreeni={modalVisibleTreeni}
-                setModalVisibleTreeni={setModalVisibleTreeni}
+            <TreeniListaModal
+                modalVisibleTreeniLista={modalVisibleTreeniLista}
+                setModalVisibleTreeniLista={setModalVisibleTreeniLista}
                 db={db}
-            ></TreeniModal>
+            ></TreeniListaModal>
             </View>
 
 

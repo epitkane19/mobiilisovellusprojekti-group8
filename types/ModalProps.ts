@@ -24,20 +24,26 @@ export type LuoProfiiliModalProps=
   setInfogiven: (React.Dispatch<React.SetStateAction<boolean>>)
 }
 export type LiikeListaModalProps={
-  modalVisible: boolean
-  setModalVisible: (React.Dispatch<React.SetStateAction<boolean>>)
+  modalVisibleLiikeLista: boolean
+  setModalVisibleLiikeLista: (React.Dispatch<React.SetStateAction<boolean>>)
   db: SQLite.SQLiteDatabase | null
 
 }
 export type LiikeModalProps={
-  modalVisible1: boolean
-  setModalVisible1: (React.Dispatch<React.SetStateAction<boolean>>)
+  modalVisibleLiike: boolean
+  setModalVisibleLiike: (React.Dispatch<React.SetStateAction<boolean>>)
   db: SQLite.SQLiteDatabase | null
 
 }
 export type PäiväModalProps={
   modalVisiblepv: boolean
   setModalVisiblepv: (React.Dispatch<React.SetStateAction<boolean>>)
+  db: SQLite.SQLiteDatabase | null
+
+}
+export type TreeniListaModalProps={
+  modalVisibleTreeniLista: boolean
+  setModalVisibleTreeniLista: (React.Dispatch<React.SetStateAction<boolean>>)
   db: SQLite.SQLiteDatabase | null
 
 }

@@ -24,8 +24,7 @@ export default function LiikeCard({item}: LiikeProps) {
     return (
         <View>
             <TouchableOpacity>
-
-                <Text style={styles.liike}>{item.Exercise_Type}</Text>
+                <Text style={styles.liike}>{item.GymDataID}  {item.Rest_Time_Minutes}</Text>
             </TouchableOpacity>
         </View>
     )

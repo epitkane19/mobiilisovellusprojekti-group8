@@ -6,7 +6,7 @@ import { AddExercise } from '../Database/Database';
 
 const { width, height } = Dimensions.get("window");
 
-export function LiikeModal({ modalVisible1, setModalVisible1, db }: LiikeModalProps) {
+export function LiikeModal({ modalVisibleLiike, setModalVisibleLiike, db }: LiikeModalProps) {
     const [liike, setLiike] = useState('')
     const [paino, setPaino] = useState('')
     const [toisto, setToisto] = useState('')
@@ -15,7 +15,7 @@ export function LiikeModal({ modalVisible1, setModalVisible1, db }: LiikeModalPr
     
     function addMove() {
         AddExercise(lepo,toisto,paino,liike,sarja,db)
-        setModalVisible1(false)
+        setModalVisibleLiike(false)
     }
 
 
@@ -23,13 +23,13 @@ export function LiikeModal({ modalVisible1, setModalVisible1, db }: LiikeModalPr
         <View>
             <Pressable
 
-                onPress={() => setModalVisible1(true)}>
+                onPress={() => setModalVisibleLiike(true)}>
                 <Text style={styles.modalNappi}>Luo uusi liike</Text>
             </Pressable>
 
             <Modal
                 animationType="slide"
-                visible={modalVisible1}>
+                visible={modalVisibleLiike}>
 
                 <View>
                     <Text style={styles.otsikko}>Lisää liike, painot, toistot, lepo yms</Text>
@@ -93,7 +93,7 @@ export function LiikeModal({ modalVisible1, setModalVisible1, db }: LiikeModalPr
                         </Pressable>
 
                         <Pressable
-                            onPress={() => setModalVisible1(false)}>
+                            onPress={() => setModalVisibleLiike(false)}>
                             <Text style={styles.modalNapit}>Sulje</Text>
                         </Pressable>
                     </View>
