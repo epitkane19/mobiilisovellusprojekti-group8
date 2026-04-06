@@ -14,7 +14,7 @@ export function LiikeModal({ modalVisible1, setModalVisible1, db }: LiikeModalPr
     const [lepo, setLepo] = useState('')
     
     function addMove() {
-        AddExercise(liike,paino,toisto,sarja,lepo,db)
+        AddExercise(lepo,toisto,paino,liike,sarja,db)
         setModalVisible1(false)
     }
 

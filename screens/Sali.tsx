@@ -5,7 +5,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { useNavigation } from '@react-navigation/native'
 import { OhjelmaModal } from '../components/OhjelmaModal'
 import { PäiväModal } from '../components/PäiväModal'
-import { Database } from '../Database/Database'
+import { Database, purgeDb } from '../Database/Database'
 import * as SQLite from 'expo-sqlite';
 import { UserData, UserWeight } from '../types/database';
 import { TreeniModal } from '../components/TreeniModal'

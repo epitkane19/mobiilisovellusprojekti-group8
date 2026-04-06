@@ -19,7 +19,7 @@ export default function LiikeCard({gymExerList}: gymArr) {
         <View>
             <TouchableOpacity>
 
-                <Text style={styles.liike}>{gymExerList[0].Repetitions}</Text>
+                <Text style={styles.liike}></Text>
             </TouchableOpacity>
         </View>
     )

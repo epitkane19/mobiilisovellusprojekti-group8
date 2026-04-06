@@ -74,7 +74,11 @@ export const AddProfile = async (etuNimi: string, sukuNimi: string, ikä: string
 {
   if (!database) return;
   console.log("dbpurge")
-  await database.runAsync('DELETE FROM UserData')
+  //await database.runAsync('DELETE FROM UserData')
+  //await database.runAsync('DELETE FROM GymData')
+  //await database.runAsync('DELETE FROM UserWeight')
+  
+
 }
 export const loadGymData = async (
   setgymExerList: React.Dispatch<React.SetStateAction<Exercise[]>>) => {
@@ -84,10 +88,11 @@ export const loadGymData = async (
   const sql = database.sql
   
   const tableData= await sql<Exercise>`SELECT * FROM GymData ORDER BY GymDataID DESC`;
-  console.log("tässä on " +tableData[1].Rest_Time_Minutes)
+  //console.log("tässä on " +tableData[4].Rest_Time_Minutes.toString())
   setgymExerList(tableData)
 };
 export const AddExercise = async (lepo: string, toisto: string, paino: string, liike: string, sarja: string, db: SQLite.SQLiteDatabase | null) => {
   if (!db) return;
-  const execData = await db.runAsync('INSERT INTO GymData (UserID, Rest_Time_Minutes, Repetitions, Weight_Kg, Exercise_Type, Set_Amount) VALUES (1,?,?,?,?,?)', lepo, toisto, paino, liike, sarja)
+  console.log("INSERT ", { lepo, toisto, paino, liike, sarja });
+  const execData = await db.runAsync('INSERT INTO GymData (UserID, Rest_Time_Minutes, Repetitions, Weight_Kg, Exercise_Type, Set_Amount) VALUES (1,?,?,?,?,?)', [lepo, toisto, paino, liike, sarja])
 }

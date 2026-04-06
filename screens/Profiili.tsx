@@ -149,8 +149,9 @@ return (
                                 <Text  style= {styles.textName}> {userData[0].Height_Cm} cm </Text>
                               </View>
 
-                              <View style={styles.textRow}>                    
+                              <View style={styles.textRow}>    
                                 <Text  style= {styles.textName}> {UserWeight[0].Weight_Kg} kg </Text>
+       
                               </View>
                        
                           </View>  
