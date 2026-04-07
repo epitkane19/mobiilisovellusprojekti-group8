@@ -12,19 +12,28 @@ type gymArr =
 
 interface LiikeProps{
     item: Exercise,
+    GymDataID: number;
+
 }
 
 
-export default function LiikeCard({item}: LiikeProps) {
 
+export default function LiikeCard({item, GymDataID}: LiikeProps) {
+
+    
     const [db, setDb] = useState<SQLite.SQLiteDatabase | null>(null);
     const [userData, setUserData] = useState<UserData[]>([])
     const [UserWeight, setUserWeight] = useState<UserWeight[]>([])
+    const [selectedExec, setSelectedExec] = useState('')
+
+   
 
     return (
         <View>
-            <TouchableOpacity>
-                <Text style={styles.liike}>{item.GymDataID}  {item.Rest_Time_Minutes}</Text>
+            <TouchableOpacity
+            onPress={() => setSelectedExec(item.GymDataID)}
+            >
+                <Text style={styles.liike}>{item.GymDataID}  {item.Rest_Time_Minutes} {selectedExec} {GymDataID}</Text>
             </TouchableOpacity>
         </View>
     )

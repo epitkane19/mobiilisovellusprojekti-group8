@@ -43,15 +43,16 @@ export function Database({ db, setDb, setUserData, setUserWeight }: DbProps) {
         CREATE TABLE IF NOT EXISTS TrainData (
           TrainDataID INTEGER PRIMARY KEY AUTOINCREMENT,
           UserID INTEGER NOT NULL,
-          Liike1 INTEGER,
-          Liike2 INTEGER,
-          Liike3 INTEGER,
-          Liike4 INTEGER,
-          Liike5 INTEGER,
-          Liike6 INTEGER,
-          Liike7 INTEGER,
-          Liike8 INTEGER,
-          Liike9 INTEGER,
+          TrainName STRING NOT NULL,
+          Exec1 INTEGER,
+          Exec2 INTEGER,
+          Exec3 INTEGER,
+          Exec4 INTEGER,
+          Exec5 INTEGER,
+          Exec6 INTEGER,
+          Exec7 INTEGER,
+          Exec8 INTEGER,
+          Exec9 INTEGER,
           FOREIGN KEY(UserID) REFERENCES UserData(UserID) ON DELETE CASCADE
         ); 
       `);
@@ -102,8 +103,8 @@ export const loadGymData = async (
   //console.log("tässä on " +tableData[4].Rest_Time_Minutes.toString())
   setgymExerList(tableData)
 };
-export const AddExercise = async (lepo: string, toisto: string, paino: string, liike: string, sarja: string, db: SQLite.SQLiteDatabase | null) => {
+export const AddExercise = async (lepo: string, toisto: string, paino: string, Exec: string, sarja: string, db: SQLite.SQLiteDatabase | null) => {
   if (!db) return;
-  console.log("INSERT ", { lepo, toisto, paino, liike, sarja });
-  const execData = await db.runAsync('INSERT INTO GymData (UserID, Rest_Time_Minutes, Repetitions, Weight_Kg, Exercise_Type, Set_Amount) VALUES (1,?,?,?,?,?)', [lepo, toisto, paino, liike, sarja])
+  console.log("INSERT ", { lepo, toisto, paino, Exec, sarja });
+  const execData = await db.runAsync('INSERT INTO GymData (UserID, Rest_Time_Minutes, Repetitions, Weight_Kg, Exercise_Type, Set_Amount) VALUES (1,?,?,?,?,?)', [lepo, toisto, paino, Exec, sarja])
 }
