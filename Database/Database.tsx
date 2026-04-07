@@ -1,9 +1,8 @@
 import * as SQLite from 'expo-sqlite';
 import { DbProps, UserData, UserWeight } from '../types/database';
 
-export function Database({db, setDb, setUserData, setUserWeight}: DbProps)
+export async function Database({db, setDb, setUserData, setUserWeight}: DbProps)
 {
-    
     const initDB = async () => {
     const database = await SQLite.openDatabaseAsync('JogAppDb3dev.db');
     setDb(database);
@@ -46,7 +45,14 @@ export function Database({db, setDb, setUserData, setUserWeight}: DbProps)
 
       loadUserData(database, setUserData, setUserWeight);
     };
-    initDB();
+
+    try {
+      await initDB();
+    } catch (error) {
+      alert("tietokantavirhe, käynnistä sovellus uudelleen")
+    }
+
+   
 }
 
 const loadUserData = async (
@@ -62,11 +68,11 @@ const loadUserData = async (
     setUserData(userDataArr)
     setUserWeight(UserWeight)
   };
-export const AddProfile = async (etuNimi: string, sukuNimi: string, ikä: string, paino: string, pituus: string, db: SQLite.SQLiteDatabase | null) => {
+export const AddProfile = async (etuNimi: string, sukuNimi: string, ikä: string, paino: string, pituus: string, db: SQLite.SQLiteDatabase | null): Promise<SQLite.SQLiteRunResult> => {
     
-  if (!db) return;
-    const resultData = await db.runAsync('INSERT INTO UserData (UserID, FirstName, LastName, Age, Height_Cm) VALUES (1,?,?,?,?)', etuNimi, sukuNimi, ikä, pituus)
-    const resultWeight = await db.runAsync('INSERT INTO UserWeight (UserID, Weight_Kg, Date) VALUES (1,?, date())', paino)  
+    const resultData = await db!.runAsync('INSERT INTO UserData (UserID, FirstName, LastName, Age, Height_Cm) VALUES (1,?,?,?,?)', etuNimi, sukuNimi, ikä, pituus)
+    const resultWeight = await db!.runAsync('INSERT INTO UserWeight (UserID, Weight_Kg, Date) VALUES (1,?, date())', paino)  
+    return resultData
     //kovakoodataan userid 1, niin ei voi missään tapauksessa muodostua dublikaatti recordeja ja voi olla ainoastaan 1 käyttäjä.
   };
 
