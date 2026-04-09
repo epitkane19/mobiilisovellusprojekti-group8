@@ -17,6 +17,7 @@ const { width, height } = Dimensions.get("window");
 type Props = NativeStackScreenProps<RootStackParamList,'Profiili'>
 
 
+
 const sivut = [
     { label: 'lenkit 7vrk', value: 'lenkit 7vrk' },
     { label: 'Paino', value: 'Paino' },

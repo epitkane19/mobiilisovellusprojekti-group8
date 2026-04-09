@@ -6,6 +6,12 @@ import { UserData, UserWeight } from '../types/database';
 import { LuoProfiiliValikkoModal } from '../components/LuoProfiiliModal';
 
 
+interface coordlist 
+{
+    "lat": number
+    "lng": number
+}
+
 export function Koti() {
 
   const db = useSQLiteContext(); //ladataan database
@@ -24,6 +30,8 @@ export function Koti() {
   useEffect(() => {
             loadUserData(db, setUserData, setUserWeight)
           }, []);
+
+        
   
 
   if(userData[0]?.UserID) // kysymysmerkki estää sen, että jos/kun usedata on undefined, ei tule runtime erroria.
