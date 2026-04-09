@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Modal, StyleSheet, Text, Pressable, View, Dimensions, TextInput, Button } from 'react-native';
+import { Modal, StyleSheet, Text, Pressable, View, Dimensions, TextInput, Button, FlatList } from 'react-native';
 import { TreeniListaModalProps, TreeniModalProps } from '../types/ModalProps';
 import { horizontalScale } from '../mathFunctions/FonttiSkaalaaja';
 import { LiikeModal } from './LiikeModal';
 import LiikeCard from './LiikeCard';
-import { Exercise } from '../types/database';
+import { Exercise, Training } from '../types/database';
 import { loadGymData } from '../Database/Database';
 import { TreeniModal } from './TreeniModal';
 
@@ -12,7 +12,7 @@ const { width, height } = Dimensions.get("window");
 
 export function TreeniListaModal({ modalVisibleTreeniLista, setModalVisibleTreeniLista, db }: TreeniListaModalProps) {
     const [modalVisibleTreeni, setModalVisibleTreeni] = useState(false);
-
+    const [gymTrainList, setGymTrainList] = useState<Training[]>([])
     const numerotest = 1
 
 
@@ -32,6 +32,19 @@ export function TreeniListaModal({ modalVisibleTreeniLista, setModalVisibleTreen
                 <View style={styles.ohjelmaModal}>
 
                     <Text style={styles.otsikko}>Treenit</Text>
+
+                    <FlatList
+                                data={gymTrainList}
+                                keyExtractor={(item) => item.GymDataID.toString()}
+                                renderItem={({ item }) =>
+                                <LiikeCard 
+                                item={item}
+                                GymDataID={item.GymDataID}
+                                toggleSelect={()=>""}/>
+                    }
+                                style=""
+                              />
+
 
                     <View style={styles.modalNappiRivi}>
                         <Pressable
