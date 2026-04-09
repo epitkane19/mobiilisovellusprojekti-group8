@@ -1,6 +1,6 @@
 import * as SQLite from 'expo-sqlite';
-import { DbProps, Exercise, UserData, UserWeight } from '../types/database';
-import { SQLiteProvider, useSQLiteContext } from 'expo-sqlite';
+import {  Exercise, UserData, UserWeight } from '../types/database';
+
 
 
 export async function InitDatabase(db: SQLite.SQLiteDatabase)
