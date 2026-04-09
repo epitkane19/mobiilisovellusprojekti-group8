@@ -2,10 +2,31 @@ import React, {useState} from 'react';
 import { Modal, StyleSheet, Text, Pressable, View, Dimensions, TextInput, Button } from 'react-native';
 import { ProfiiliModalProps } from '../types/ModalProps'; 
 import { horizontalScale } from '../mathFunctions/FonttiSkaalaaja';
+import { AddNewWeight } from '../Database/Database';
+import { useSQLiteContext } from 'expo-sqlite';
 
 const { width, height } = Dimensions.get("window");
 
 export function ProfiiliValikkoModal({modalVisible, setModalVisible}: ProfiiliModalProps) {
+
+  const db = useSQLiteContext(); //ladataan database konstekstista
+  const [ikä, setikä] = useState<string>("")
+  const [paino, setPaino] = useState<string>("")
+  const [pituus, setPituus] = useState<string>("")
+
+  function setValues()
+  {
+    if(paino != null && paino != undefined)
+    try 
+    {
+        AddNewWeight(Number(paino), db)
+        setModalVisible(false)
+    } catch (error) 
+    {
+       alert("tietokantavirhe") 
+    }
+         
+    }
 
   return (
     <View style={styles.containerAsButton}> 
@@ -23,17 +44,23 @@ export function ProfiiliValikkoModal({modalVisible, setModalVisible}: ProfiiliMo
                 <View style={styles.flex}>
 
                     <TextInput
+                    keyboardType="numeric"
                     style= {styles.textinput}
+                    onChangeText={setPaino}
                     placeholder='Anna painosi:'>    
                     </TextInput>
 
                     <TextInput
+                    keyboardType="numeric"
                     style= {styles.textinput}
+                    onChangeText={setPituus}
                     placeholder='Anna pituutesi:'>
                     </TextInput>
 
                     <TextInput
+                    keyboardType="numeric"
                     style= {styles.textinput}
+                    onChangeText={setikä}
                     placeholder='Anna ikäsi:'>
                     </TextInput>
             </View>
@@ -41,7 +68,7 @@ export function ProfiiliValikkoModal({modalVisible, setModalVisible}: ProfiiliMo
             <View style={styles.PressableContainer}>   
                 <Pressable
                 style= {styles.Pressable} 
-                onPress={() => setModalVisible(false)}>
+                onPress={() => setValues()}>
                     <Text style={styles.textPressableBlack}>Tallenna tietosi</Text>
                 </Pressable>
 

@@ -10,7 +10,7 @@ export async function JogHistory(db: SQLite.SQLiteDatabase | null, setJogArr: Re
     //console.log("data: ", data)
     const nestedData = data![0]
     //console.log("nested data: ", nestedData)
-    const coordsData = nestedData.Jog_Coordinates
+    const coordsData = nestedData
     console.log("coords data: ", coordsData)
 
     return coordsData;

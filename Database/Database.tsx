@@ -2,6 +2,9 @@ import * as SQLite from 'expo-sqlite';
 import { DbProps, Exercise, UserData, UserWeight } from '../types/database';
 import { SQLiteProvider, useSQLiteContext } from 'expo-sqlite';
 import { Jogdata } from '../types/JogData';
+import moment from 'moment';
+import { date } from '../types/Date';
+import { jogId } from '../types/JogDataId';
 
 
 export async function InitDatabase(db: SQLite.SQLiteDatabase)
@@ -148,8 +151,8 @@ export const loadUserData = async (
   setUserWeight: React.Dispatch<React.SetStateAction<UserWeight[]>>) => 
   {
    
-    const userDataArr = await database.getAllAsync<UserData>(`SELECT * FROM UserData ORDER BY UserID DESC`);
-    const UserWeight = await database.getAllAsync<UserWeight>(`SELECT * FROM UserWeight ORDER BY UserID DESC`);
+    const userDataArr = await database.getAllAsync<UserData>(`SELECT * FROM UserData`);
+    const UserWeight = await database.getAllAsync<UserWeight>(`SELECT * FROM UserWeight ORDER BY UserWeightID DESC`); // order by userweightid, haetaan aina viimeisin käyttäjän paino
     console.log(userDataArr)
     setUserData(userDataArr)
     setUserWeight(UserWeight)
@@ -182,19 +185,53 @@ export const AddNewJog = async (fromStartMsToKm: number, calories: number, dista
         
         if (!db) return;
 
-        const minutes = time_seconds / 1000 / 60;
+        const minutes = time_seconds / 1000 / 60;  
+        await db.runAsync('INSERT INTO JogData (UserID, Avg_Speed, Calories_Burned, length_Km, Time_Minutes, Jog_Coordinates, Jog_Date) VALUES (1,?,?,?,?,?,date())', fromStartMsToKm, calories, distance, minutes, coordsStringify )
+        const jogDataArrLength = await db.getAllAsync<Jogdata>(`SELECT * FROM JogData`);
+        console.log("jogdata length: "+ jogDataArrLength.length)
 
-        console.log("cords ", coordsStringify)
-    
-        const resultData = await db.runAsync('INSERT INTO JogData (UserID, Avg_Speed, Calories_Burned, length_Km, Time_Minutes, Jog_Coordinates, Jog_Date) VALUES (1,?,?,?,?,?,date())', fromStartMsToKm, calories, distance, minutes, coordsStringify )
-        //kovakoodataan userid 1, niin ei voi missään tapauksessa muodostua dublikaatti recordeja ja voi olla ainoastaan 1 käyttäjä.
-        console.log("resultData: ",resultData)
-
-        const xd = await db.getAllAsync<Jogdata>(`SELECT * FROM JogData`);
-        //console.log("joggi data ", xd[6].Jog_Coordinates)
-
-
+        if(jogDataArrLength.length >= 10)
+          {
+              const latestJogID = await db.getFirstAsync<jogId>(`SELECT JogDataID FROM JogData ORDER By JogDataID`) //haetaan vanhin jogdata id
+              console.log("latestJogID: "+ latestJogID?.JogDataID)
+              if(latestJogID?.JogDataID)
+              {
+              await db.runAsync('DELETE FROM JogData WHERE JogDataID =?', latestJogID.JogDataID) //hävitetään vanhin jog recordi.
+              }
+          }
     };
+
+export const updateProfile = async (ikä: number, pituus: number, database: SQLite.SQLiteDatabase): Promise<SQLite.SQLiteRunResult> => {
+    
+    const resultData = await database!.runAsync('UPDATE UserData SET Age =?, Height_Cm =? WHERE UserID =1', [ikä] [pituus])
+
+    console.log(resultData)
+    return resultData
+    //kovakoodataan userid 1, niin ei voi missään tapauksessa muodostua dublikaatti recordeja ja voi olla ainoastaan 1 käyttäjä.
+  };
+
+export const AddNewWeight = async (Weight_Kg: number, database: SQLite.SQLiteDatabase) => {
+    
+    const NewDate = new Date()
+    const today = moment(NewDate).format('YYYY-MM-DD')
+
+    const latestWeightDate = await database.getFirstAsync<date>(`SELECT Date FROM UserWeight`);
+
+    
+    if(today == latestWeightDate?.Date) //ei sallita samana päivänä useampaa painon muutosta. kehno ratkaisu, mut tällä ratkaisulla kuvaajat toimii
+      {
+        alert("painoa voi muuttaa vain kerran päivässä")
+      }
+    else
+      {
+      await database!.runAsync('INSERT INTO UserWeight (UserID, Weight_Kg, Date) VALUES (1,?,date())', [Weight_Kg])
+      }
+
+    console.log(latestWeightDate?.Date)
+    console.log(today)
+
+  };
+    
 export const loadGymData = async (setgymExerList: React.Dispatch<React.SetStateAction<Exercise[]>>, database: SQLite.SQLiteDatabase | null) => {
   
   console.log("ennen")
