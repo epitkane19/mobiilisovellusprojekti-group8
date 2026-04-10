@@ -5,9 +5,7 @@ import * as Location from 'expo-location';
 import { leafletHtml } from '../components/leaflet';
 import { leafletHtmlStat } from '../components/leaflet_statcard';
 import { laskeAvgNopeus, LaskeMatkaKoordinaateista, laskeLenkinKalorit } from '../mathFunctions/functions'
-import { center } from '@shopify/react-native-skia';
 import { UserData, UserWeight } from '../types/database';
-import * as SQLite from 'expo-sqlite';
 import { loadUserData, AddNewJog } from '../Database/Database';
 import { useSQLiteContext } from 'expo-sqlite';
 
@@ -59,7 +57,6 @@ export function Kartta() {
 
     useEffect(() => {
               loadUserData(db, setUserData, setUserWeight) // useeffectilla ladataan db, eli tietokanta usetstate muuttujaan
-              //purgeDb(db)
             }, []);
 
     useEffect(() => {

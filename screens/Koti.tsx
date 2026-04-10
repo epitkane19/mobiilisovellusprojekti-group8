@@ -5,6 +5,7 @@ import { useSQLiteContext } from 'expo-sqlite';
 import { UserData, UserWeight } from '../types/database';
 import { LuoProfiiliValikkoModal } from '../components/LuoProfiiliModal';
 import { JogHistory } from '../components/JogHistory';
+import { jogCoordinates } from '../types/jogCoordinates';
 
 
 interface coordlist 
@@ -17,7 +18,7 @@ export function Koti() {
 
   const db = useSQLiteContext(); //ladataan database
 
-  const [jogArr, setJogArr] = useState<string[]>([])
+  const [jogArr, setJogArr] = useState<string | undefined>()
   const [userData, setUserData] = useState<UserData[]>([])
   const [UserWeight, setUserWeight] = useState<UserWeight[]>([])
   const [modalVisible, setModalVisible] = useState(true);// jos ei käyttäjää niin forcetetaan modali auki.

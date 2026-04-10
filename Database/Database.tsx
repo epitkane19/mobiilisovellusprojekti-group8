@@ -1,10 +1,10 @@
 import * as SQLite from 'expo-sqlite';
-import { DbProps, Exercise, UserData, UserWeight } from '../types/database';
-import { SQLiteProvider, useSQLiteContext } from 'expo-sqlite';
+import { Exercise, UserData, UserWeight } from '../types/database';
 import { Jogdata } from '../types/JogData';
 import moment from 'moment';
 import { date } from '../types/Date';
 import { jogId } from '../types/JogDataId';
+import { jogCoordinates } from '../types/jogCoordinates';
 
 
 export async function InitDatabase(db: SQLite.SQLiteDatabase)
@@ -188,6 +188,8 @@ export const AddNewJog = async (fromStartMsToKm: number, calories: number, dista
         const minutes = time_seconds / 1000 / 60;  
         await db.runAsync('INSERT INTO JogData (UserID, Avg_Speed, Calories_Burned, length_Km, Time_Minutes, Jog_Coordinates, Jog_Date) VALUES (1,?,?,?,?,?,date())', fromStartMsToKm, calories, distance, minutes, coordsStringify )
         const jogDataArrLength = await db.getAllAsync<Jogdata>(`SELECT * FROM JogData`);
+
+        console.log("coordsstring: "+ coordsStringify)
         console.log("jogdata length: "+ jogDataArrLength.length)
 
         if(jogDataArrLength.length >= 10)
@@ -242,16 +244,19 @@ export const loadGymData = async (setgymExerList: React.Dispatch<React.SetStateA
 };
 
 export const loadJogArr = async (
-  setJogArr: React.Dispatch<React.SetStateAction<string[]>>, 
+  setJogArr: React.Dispatch<React.SetStateAction<string | undefined>>, 
   database: SQLite.SQLiteDatabase | null,
-  id:number):Promise<string[] | undefined> => {
+  id:number):Promise<string | undefined> => {
+
   
-  if (!database) return
-  const JogObj = await database.getAllAsync<string>(`SELECT Jog_Coordinates FROM JogData WHERE JogDataID =?`, [id]);  //SELECT Jog_Coordinates FROM JogData WHERE JogDataID =?` [id]
-  //console.log("tässä on " +tableData[0].Rest_Time_Minutes.toString())
-  console.log("jogobj[0]: ", JogObj[0])
-  setJogArr(JogObj)
-  return JogObj
+  if (!database) return ""
+  //const JogObjall = await database.getAllAsync<string>(`SELECT * FROM JogData`);
+  const JogObj = await database.getAllAsync<jogCoordinates>(`SELECT Jog_Coordinates FROM JogData WHERE JogDataID =?`, [id]);  //SELECT Jog_Coordinates FROM JogData WHERE JogDataID =?` [id]
+  
+  console.log("jogobj: ", JogObj[0].Jog_Coordinates)
+  
+  setJogArr(JogObj[0].Jog_Coordinates)
+  return JogObj[0].Jog_Coordinates
 };
 
 export const AddExercise = async (lepo: string, toisto: string, paino: string, Exec: string, sarja: string, db: SQLite.SQLiteDatabase | null) => {
