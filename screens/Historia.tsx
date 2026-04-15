@@ -5,14 +5,16 @@ import * as Location from 'expo-location';
 import { leafletHtml } from '../components/leaflet';
 import { leafletHtmlStat } from '../components/leaflet_statcard';
 import { laskeAvgNopeus, LaskeMatkaKoordinaateista, laskeLenkinKalorit } from '../mathFunctions/functions'
-import { UserData, UserWeight } from '../types/database';
-import { loadUserData, AddNewJog } from '../Database/Database';
+import { UserData, UserWeight,  } from '../types/database';
+import { Jogdata } from '../types/JogData';
+import { jogCoordinates } from '../types/jogCoordinates';
+import { loadUserData, loadJogArr } from '../Database/Database';
 import { useSQLiteContext } from 'expo-sqlite';
-import { JogHistory } from '../components/JogHistory';
+//import { JogHistory } from '../components/JogHistory';
 
 interface coordInterface {
-    coords: { lat: number; lng: number; };
-    time: number;
+    lat: number 
+    lng: number
 }
 
 export function Historia() {
@@ -21,16 +23,31 @@ export function Historia() {
 
     const [userData, setUserData] = useState<UserData[]>([])
     const [UserWeight, setUserWeight] = useState<UserWeight[]>([])
+    //const [JogArr, setJogArr] = useState<jogCoordinates>()
+    const [JogDataArr, setJogDataArr] = useState<Jogdata[]>([])
 
     const statWebviewRef = useRef<WebView | null>(null);
     const [coordList, setCoordList] = useState<coordInterface[]>([]);
 
     const [showStats, setShowStats] = useState(false);
+
+    const [id, setId] = useState(0);
+    const [velocity, setVelocity] = useState(0);
+    const [distance, setDistance] = useState(0);
+    const [time, setTime] = useState(0);
+    const[calories, setCalories] = useState(0);
+    const[date, setDate] = useState("");
         
     useEffect(() => {
         loadUserData(db, setUserData, setUserWeight) //(uus versio) useeffectilla ladataan db:stä tiedot mitä halutaan
-        //purgeDb(db)
+        loadJogArr(db, setJogDataArr, id)
+
+        console.log("coords historia sivulla: ", JogDataArr)
     }, []);
+
+    useEffect(() => {
+        console.log("coords historia sivulla: ", JogDataArr)
+    }, [id]);
 
     const handleMessage = useCallback(async (event: any) => {
             const data = event.nativeEvent.data;
@@ -38,7 +55,7 @@ export function Historia() {
             setTimeout(() => {
                 statWebviewRef.current?.postMessage(JSON.stringify({
                     type: "draw-polyline",
-                    coords: coordList.map(c => c.coords)
+                    coords: coordList
                 }));
             }, 300)
     
@@ -46,7 +63,7 @@ export function Historia() {
 
     return (
         <View style={styles.container}>
-            <Pressable onPress={() => setShowStats(true) }>
+            <Pressable onPress={() => [setId(1), setShowStats(true)] }>
                 <View style={styles.numberContainer}>
                     <Text style={styles.teksti}>
                         Testi
