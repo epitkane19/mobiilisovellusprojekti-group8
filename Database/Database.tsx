@@ -77,6 +77,7 @@ export async function InitDatabase(db: SQLite.SQLiteDatabase) {
 
   try {
     await initDB();
+    await db.runAsync('PRAGMA foreign_keys = ON');
     loadUserDataToConsole(db)
   } catch (error) {
     alert("tietokantavirhe, käynnistä sovellus uudelleen")

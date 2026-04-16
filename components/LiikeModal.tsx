@@ -14,6 +14,7 @@ export function LiikeModal({ modalVisibleLiike, setModalVisibleLiike,db }: Liike
     const [lepo, setLepo] = useState('')
     
     function addMove() {
+        console.log("add ")
         AddExercise(lepo,toisto,paino,liike,sarja,db)
         setModalVisibleLiike(false)
     }
@@ -88,7 +89,7 @@ export function LiikeModal({ modalVisibleLiike, setModalVisibleLiike,db }: Liike
                     <View style={styles.modalNappiRivi}>
                         <Pressable
 
-                            onPress={()=>{addMove}}>
+                            onPress={()=>{addMove()}}>
                             <Text style={styles.modalNapit}>Tallenna</Text>
                         </Pressable>
 
