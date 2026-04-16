@@ -6,7 +6,7 @@ import { AddExercise } from '../Database/Database';
 
 const { width, height } = Dimensions.get("window");
 
-export function LiikeModal({ modalVisibleLiike, setModalVisibleLiike, db }: LiikeModalProps) {
+export function LiikeModal({ modalVisibleLiike, setModalVisibleLiike,db }: LiikeModalProps) {
     const [liike, setLiike] = useState('')
     const [paino, setPaino] = useState('')
     const [toisto, setToisto] = useState('')
@@ -88,7 +88,7 @@ export function LiikeModal({ modalVisibleLiike, setModalVisibleLiike, db }: Liik
                     <View style={styles.modalNappiRivi}>
                         <Pressable
 
-                            onPress={addMove}>
+                            onPress={()=>{addMove}}>
                             <Text style={styles.modalNapit}>Tallenna</Text>
                         </Pressable>
 

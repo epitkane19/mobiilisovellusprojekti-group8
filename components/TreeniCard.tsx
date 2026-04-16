@@ -9,6 +9,7 @@ import { useSQLiteContext } from 'expo-sqlite';
 interface TreeniProps {
     item: Training,
     TrainDataID: number;
+    OnPress?: () => void;
     SetTrainToDay?: (id: string) => void;
     toggleSelect?: (id: string) => void;
     selected?: boolean;
@@ -16,7 +17,7 @@ interface TreeniProps {
 
 
 
-export default function TreeniCard({ item, TrainDataID, SetTrainToDay, toggleSelect, selected }: TreeniProps) {
+export default function TreeniCard({ item, TrainDataID, SetTrainToDay, toggleSelect, selected, OnPress }: TreeniProps) {
 
 
     const db = useSQLiteContext(); //ladataan database konstekstista
@@ -30,7 +31,9 @@ export default function TreeniCard({ item, TrainDataID, SetTrainToDay, toggleSel
     return (
         <View>
             <TouchableOpacity
-                onPress={() => SetTrainToDay?.(item.TrainDataID)}
+                onPress={() => {SetTrainToDay?.(item.TrainDataID);
+                    OnPress?.();
+                }}
                 style={[
                     styles.liike,
                     selected && styles.selectedLiike]}

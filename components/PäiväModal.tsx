@@ -4,7 +4,7 @@ import { horizontalScale } from '../mathFunctions/FonttiSkaalaaja';
 import { LiikeModal } from './LiikeModal';
 import { PäiväModalProps } from '../types/ModalProps';
 import { TrainDay, Training } from '../types/database';
-import { AddTrainingToDay, loadTrainData } from '../Database/Database';
+import { AddTrainingToDay, loadDayData, loadTrainData } from '../Database/Database';
 import { useSQLiteContext } from 'expo-sqlite';
 import TreeniCard from './TreeniCard';
 
@@ -13,64 +13,75 @@ const { width, height } = Dimensions.get("window");
 export function PäiväModal({ modalVisiblepv, setModalVisiblepv }: PäiväModalProps) {
     const [gymTrainList, setGymTrainList] = useState<Training[]>([])
     const db = useSQLiteContext(); //ladataan database konstekstista
-    const [selectedDay, setSelectedDay]= useState<number>(0)
-    const [selectedTraining, setSelectedTraining]= useState<number>(0)
-    const [trainForDays,setTrainForDays]= useState<TrainDay[]>([])
+    const [selectedDay, setSelectedDay] = useState<number>(0)
+    const [selectedTraining, setSelectedTraining] = useState<number>(0)
+    const [trainForDays, setTrainForDays] = useState<TrainDay[]>([])
+    const [refresh, setRefresh] = useState(false)
+
 
     useEffect(() => {
-        loadTrainData(setGymTrainList, db)
-    }, [])
+        if (refresh) {
+            setRefresh(false)
+        }
+     console.log("aaa ", trainForDays),
 
-    function addTraintoDay(){
-        AddTrainingToDay(selectedDay,selectedTraining,db)
+        loadTrainData(setGymTrainList, db)
+        loadDayData(setTrainForDays, db)
+    }, [refresh])
+
+    function addTraintoDay() {
+        AddTrainingToDay(selectedDay, selectedTraining, db)
         setSelectedDay(0)
         setSelectedTraining(0)
     }
+    const trainmap=new Map()
+
+    trainmap.set(selectedDay,1)
 
     return (
         <View>
 
             <TouchableOpacity style={styles.päivärivi}
-                onPress={() => [setModalVisiblepv(true),setSelectedDay(1)]}>
+                onPress={() => [setModalVisiblepv(true), setSelectedDay(1)]}>
 
                 <Text style={styles.päivä}>Ma</Text>
-                <Text style={styles.päiväbox}></Text>
+                <Text style={styles.päiväbox}>{trainForDays[6]?.TrainNumber}</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.päivärivi}
-                onPress={() => [setModalVisiblepv(true),setSelectedDay(2)]}>
+                onPress={() => [setModalVisiblepv(true), setSelectedDay(2)]}>
 
                 <Text style={styles.päivä}>Ti</Text>
-                <Text style={styles.päiväbox}>Kovaa treeniä</Text>
+                <Text style={styles.päiväbox}>{trainForDays[5]?.TrainNumber}</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.päivärivi}
-                onPress={() => [setModalVisiblepv(true),setSelectedDay(3)]}>
+                onPress={() => [setModalVisiblepv(true), setSelectedDay(3)]}>
 
                 <Text style={styles.päivä}>Ke</Text>
-                <Text style={styles.päiväbox}>Kovaa treeniä</Text>
+                <Text style={styles.päiväbox}>{trainForDays[4]?.TrainNumber}</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.päivärivi}
-                onPress={() => [setModalVisiblepv(true),setSelectedDay(4)]}>
+                onPress={() => [setModalVisiblepv(true), setSelectedDay(4)]}>
 
                 <Text style={styles.päivä}>To</Text>
-                <Text style={styles.päiväbox}>Kovaa treeniä</Text>
+                <Text style={styles.päiväbox}>{trainForDays[3]?.TrainNumber}</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.päivärivi}
-                onPress={() => [setModalVisiblepv(true),setSelectedDay(5)]}>
+                onPress={() => [setModalVisiblepv(true), setSelectedDay(5)]}>
 
                 <Text style={styles.päivä}>Pe</Text>
-                <Text style={styles.päiväbox}>Kovaa treeniä</Text>
+                <Text style={styles.päiväbox}>{trainForDays[2]?.TrainNumber}</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.päivärivi}
-                onPress={() => [setModalVisiblepv(true),setSelectedDay(6)]}>
+                onPress={() => [setModalVisiblepv(true), setSelectedDay(6)]}>
 
                 <Text style={styles.päivä}>La</Text>
-                <Text style={styles.päiväbox}>Kovaa treeniä</Text>
+                <Text style={styles.päiväbox}>{trainForDays[1]?.TrainNumber}</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.päivärivi}
-                onPress={() => [setModalVisiblepv(true),setSelectedDay(7)]}>
+                onPress={() => [setModalVisiblepv(true), setSelectedDay(7)]}>
 
                 <Text style={styles.päivä}>Su</Text>
-                <Text style={styles.päiväbox}>Kovaa treeniä</Text>
+                <Text style={styles.päiväbox}>{trainForDays[0]?.TrainNumber}</Text>
             </TouchableOpacity>
 
 
@@ -82,6 +93,13 @@ export function PäiväModal({ modalVisiblepv, setModalVisiblepv }: PäiväModal
 
                     <Text style={styles.otsikko}>Päivän treeni</Text>
 
+                    <View>
+                        {selectedTraining > 0 && (
+                            <Text>
+                                {selectedTraining}
+                            </Text>
+                        )}
+                    </View>
                     <FlatList
                         data={gymTrainList}
                         keyExtractor={(item) => item.TrainDataID.toString()}
@@ -89,8 +107,9 @@ export function PäiväModal({ modalVisiblepv, setModalVisiblepv }: PäiväModal
                             <TreeniCard
                                 item={item}
                                 TrainDataID={item.TrainDataID}
-                                SetTrainToDay={()=>[console.log("lisää päivälle: ",selectedDay,": treeninum: ",item.TrainDataID),
-                                    setSelectedTraining(item.TrainDataID),
+                                SetTrainToDay={() => [console.log("lisää päivälle: ", selectedDay, ": treeninum: ", item.TrainDataID),
+                                console.log("treenilista: ", gymTrainList[2]),
+                                setSelectedTraining(item.TrainDataID),
                                 ]}
                                 selected={selectedTraining === item.TrainDataID}
                             />
@@ -100,8 +119,10 @@ export function PäiväModal({ modalVisiblepv, setModalVisiblepv }: PäiväModal
                     <View style={styles.modalNappiRivi}>
                         <Pressable
 
-                            onPress={() => [setModalVisiblepv(false),
-                                        addTraintoDay()
+                            onPress={() => [
+                                setRefresh(true),
+                                setModalVisiblepv(false),
+                                addTraintoDay(),
 
                             ]}>
                             <Text style={styles.modalNappi}>Tallenna</Text>
@@ -109,8 +130,10 @@ export function PäiväModal({ modalVisiblepv, setModalVisiblepv }: PäiväModal
 
                         <Pressable
                             onPress={() => [setModalVisiblepv(false),
-                                setSelectedDay(0),
-                                setSelectedTraining(0)
+                            setSelectedDay(0),
+                            setSelectedTraining(0),
+                            setRefresh(true)
+
                             ]}>
                             <Text style={styles.modalNappi}>Sulje</Text>
                         </Pressable>
@@ -181,5 +204,11 @@ const styles = StyleSheet.create({
     ohjelmaModal: {
         backgroundColor: '#9F6BFB',
         flex: 1
+    },
+    selectedTrainingText: {
+        fontSize: 18,
+        padding: 10,
+        textAlign: 'center',
+        color: '#333'
     }
 });

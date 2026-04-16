@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Modal, StyleSheet, Text, Pressable, View, Dimensions, TextInput, Button, FlatList } from 'react-native';
+import { Modal, StyleSheet, Text, Pressable, View, Dimensions, TextInput, Button, FlatList, TouchableOpacity } from 'react-native';
 import { TreeniListaModalProps, TreeniModalProps } from '../types/ModalProps';
 import { horizontalScale } from '../mathFunctions/FonttiSkaalaaja';
 import { LiikeModal } from './LiikeModal';
@@ -14,11 +14,14 @@ const { width, height } = Dimensions.get("window");
 export function TreeniListaModal({ modalVisibleTreeniLista, setModalVisibleTreeniLista, db }: TreeniListaModalProps) {
     const [modalVisibleTreeni, setModalVisibleTreeni] = useState(false);
     const [gymTrainList, setGymTrainList] = useState<Training[]>([])
+    const [selectedTraining, setSelectedTraining] = useState<Training | null>(null);
+    const [modalTraining, setModalTraining] = useState(false);
+
     const numerotest = 1
 
-useEffect(() => {
-    loadTrainData(setGymTrainList, db) 
-  }, [])
+    useEffect(() => {
+        loadTrainData(setGymTrainList, db)
+    }, [])
 
     return (
         <View>
@@ -37,19 +40,48 @@ useEffect(() => {
                     <Text style={styles.otsikko}>Treenit</Text>
 
                     <FlatList
-                                data={gymTrainList}
-                                keyExtractor={(item) => item.TrainDataID.toString()}
-                                renderItem={({ item }) =>
-                                <TreeniCard 
+                        data={gymTrainList}
+                        keyExtractor={(item) => item.TrainDataID.toString()}
+                        renderItem={({ item }) =>
+                            <TreeniCard
                                 item={item}
                                 TrainDataID={item.TrainDataID}
-                                />
-                    }
-                                style=""
-                              />
+                                OnPress={() => {
+                                    setSelectedTraining(item);
+                                    setModalTraining(true);
+                                }}
+                            />
+                        }
+                        style=""
+                    />
+                    <Modal
+                        animationType="slide"
+                        visible={modalTraining}
+                    >
+                        <View style={styles.ohjelmaModal}>
+                            <Text>Train Name: {selectedTraining?.TrainName}</Text>
+                            
+                            {selectedTraining?.Exec1 && (<Text>{selectedTraining.Exec1}</Text>)}
+                            {selectedTraining?.Exec2 && (<Text>{selectedTraining.Exec2}</Text>)}
+                            {selectedTraining?.Exec3 && (<Text>{selectedTraining.Exec3}</Text>)}
+                            {selectedTraining?.Exec4 && (<Text>{selectedTraining.Exec4}</Text>)}
+                            {selectedTraining?.Exec5 && (<Text>{selectedTraining.Exec5}</Text>)}
+                            {selectedTraining?.Exec6 && (<Text>{selectedTraining.Exec6}</Text>)}
+                            {selectedTraining?.Exec7 && (<Text>{selectedTraining.Exec7}</Text>)}
+                            {selectedTraining?.Exec8 && (<Text>{selectedTraining.Exec8}</Text>)}
+                            {selectedTraining?.Exec9 && (<Text>{selectedTraining.Exec9}</Text>)}
+                            {selectedTraining?.Exec10 && (<Text>{selectedTraining.Exec10}</Text>)}
 
+                        </View>
+                        <Pressable
+                            onPress={() => { setModalTraining(false) }}>
+                            <Text style={styles.modalNapit}>Sulje</Text>
+                        </Pressable>
+
+                    </Modal>
 
                     <View style={styles.modalNappiRivi}>
+
                         <Pressable
                             onPress={() => setModalVisibleTreeniLista(false)}>
                             <Text style={styles.modalNappi}>Sulje</Text>

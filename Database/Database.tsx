@@ -65,7 +65,13 @@ export async function InitDatabase(db: SQLite.SQLiteDatabase) {
         TrainNumber INTEGER,
         FOREIGN KEY(UserID) REFERENCES UserData(UserID) ON DELETE CASCADE
         );  
-        
+        INSERT INTO TrainDay (UserID, Day, TrainNumber) VALUES (1, 1, 0);
+        INSERT INTO TrainDay (UserID, Day, TrainNumber) VALUES (1, 2, 0);
+        INSERT INTO TrainDay (UserID, Day, TrainNumber) VALUES (1, 3, 0);
+        INSERT INTO TrainDay (UserID, Day, TrainNumber) VALUES (1, 4, 0);
+        INSERT INTO TrainDay (UserID, Day, TrainNumber) VALUES (1, 5, 0);
+        INSERT INTO TrainDay (UserID, Day, TrainNumber) VALUES (1, 6, 0);
+        INSERT INTO TrainDay (UserID, Day, TrainNumber) VALUES (1, 7, 0);
       `);
   };
 
@@ -77,76 +83,6 @@ export async function InitDatabase(db: SQLite.SQLiteDatabase) {
   }
 }
 
-/*export async function Database({db, setDb, setUserData, setUserWeight}: DbProps)
-{
-    const initDB = async () => {
-    const database = await SQLite.openDatabaseAsync('JogAppDb4dev.db');
-    setDb(database);
-
-    await database.execAsync(`
-        CREATE TABLE IF NOT EXISTS UserData (
-          UserID INTEGER PRIMARY KEY,
-          FirstName TEXT NOT NULL,
-          LastName TEXT NOT NULL,
-          Height_Cm REAL NOT NULL CHECK (Height_Cm >= 0),
-          Age INTEGER NOT NULL CHECK (Age >= 0)
-        );
-        CREATE TABLE IF NOT EXISTS UserWeight (
-          UserWeightID INTEGER PRIMARY KEY AUTOINCREMENT,
-          UserID INTEGER NOT NULL, 
-          Weight_Kg REAL NOT NULL CHECK (Weight_kg >= 0),
-          Date TIMESTAMP NOT NULL,
-          FOREIGN KEY(UserID) REFERENCES UserData(UserID) ON DELETE CASCADE
-        );
-        CREATE TABLE IF NOT EXISTS JogData (
-          JogDataID INTEGER PRIMARY KEY AUTOINCREMENT,
-          UserID INTEGER NOT NULL,
-          Avg_Speed REAL NOT NULL,
-          Calories_Burned REAL NOT NULL,
-          length_Km REAL NOT NULL CHECK (length_Km >= 0),
-          Time_Minutes REAL NOT NULL CHECK (Time_Minutes >= 0),
-          Jog_Date TIMESTAMP NOT NULL,
-          FOREIGN KEY(UserID) REFERENCES UserData(UserID) ON DELETE CASCADE
-        );
-        CREATE TABLE IF NOT EXISTS GymData (
-          GymDataID INTEGER PRIMARY KEY AUTOINCREMENT,
-          UserID INTEGER NOT NULL, 
-          Rest_Time_Minutes INTEGER NOT NULL CHECK (Rest_Time_Minutes >= 0),
-          Repetitions INTEGER NOT NULL CHECK (Repetitions > 0),
-          Weight_Kg REAL NOT NULL CHECK (Weight_Kg > 0),
-          Exercise_Type TEXT NOT NULL,
-          Set_Amount INTEGER NOT NULL,
-          FOREIGN KEY(UserID) REFERENCES UserData(UserID) ON DELETE CASCADE
-        );     
-        CREATE TABLE IF NOT EXISTS TrainData (
-          TrainDataID INTEGER PRIMARY KEY AUTOINCREMENT,
-          UserID INTEGER NOT NULL,
-          TrainName STRING NOT NULL,
-          Exec1 INTEGER,
-          Exec2 INTEGER,
-          Exec3 INTEGER,
-          Exec4 INTEGER,
-          Exec5 INTEGER,
-          Exec6 INTEGER,
-          Exec7 INTEGER,
-          Exec8 INTEGER,
-          Exec9 INTEGER,
-          FOREIGN KEY(UserID) REFERENCES UserData(UserID) ON DELETE CASCADE
-        ); 
-      `);
-
-
-      loadUserData(database, setUserData, setUserWeight);
-    };
-
-    try {
-      await initDB();
-    } catch (error) {
-      alert("tietokantavirhe, käynnistä sovellus uudelleen")
-    }
-
-   
-}*/
 
 export const loadUserData = async (
   database: SQLite.SQLiteDatabase,
@@ -184,25 +120,18 @@ export const purgeDb = async (database: SQLite.SQLiteDatabase | null) => {
 export const AddTrainingToDay = async (day: number, trainNumber: number, db: SQLite.SQLiteDatabase | null) => {
   if (!db) return;
   console.log("Add trainign : ", { day, trainNumber });
-  const xs = await db.runAsync('INSERT INTO TrainDay (UserID, Day, TrainNumber) VALUES (1, ?, ?)', [day, trainNumber]);
+  const xs = await db.runAsync('UPDATE TrainDay set UserID=1, TrainNumber=? WHERE Day=? ', [trainNumber, day]);
 };
-/*
-export const loadTrainData = async (setGymTrainList: React.Dispatch<React.SetStateAction>, database: SQLite.SQLiteDatabase | null) => {
+export const loadDayData = async (setTrainForDays: React.Dispatch<React.SetStateAction<TrainDay[]>>, database: SQLite.SQLiteDatabase | null) => {
+
+  console.log("ennen")
   if (!database) return
-  const tableDataTrain = await database.getAllAsync<Training>(`SELECT * FROM TrainData ORDER BY TrainDataID DESC`);
-  //console.log("tässä on " +tableData[0].Rest_Time_Minutes.toString())
-  setGymTrainList(tableDataTrain)
+  const tableData = await database.getAllAsync<TrainDay>(`SELECT * FROM TrainDay ORDER BY TrainDayID DESC`);
+  console.log("päviä " + tableData[0].Day, "trainnum " + tableData[0].TrainNumber)
+  setTrainForDays(tableData)
 };
 
-  export const LoadTrainingsForDay = async (day: number, db: SQLite.SQLiteDatabase | null) => {
-    if (!db) return;
-    const trainings = await db.getAllAsync<TrainDay>(
-        'SELECT * FROM TrainDay WHERE Day = ?', [day]
 
-    );
-    console.log("Training for day:", day, trainings);
-    return trainings;
-};*/
 export const AddNewJog = async (fromStartMsToKm: number, calories: number, distance: number, time_seconds: number, db: SQLite.SQLiteDatabase | null) => {
 
   if (!db) return;
