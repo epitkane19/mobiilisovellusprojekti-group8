@@ -48,7 +48,7 @@ export function Profiili({ route }: Props) {
   {
     setKarttamoodi(Karttamoodi.paino)
     console.log(karttaMoodi)
-    console.log(WeightAndJogdata)
+    console.log("weight ja joggidata " +JSON.stringify(WeightAndJogdata))
     setChartsVisible(true)
   }
   function asetaLenkitPituusChartiin()

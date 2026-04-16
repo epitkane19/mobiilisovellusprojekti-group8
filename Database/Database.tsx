@@ -69,6 +69,7 @@ export async function InitDatabase(db: SQLite.SQLiteDatabase)
 
     try {
       await initDB();
+      await db.runAsync('PRAGMA foreign_keys = ON')
       loadUserDataToConsole(db)
     } catch (error) {
       alert("tietokantavirhe, käynnistä sovellus uudelleen")
@@ -154,16 +155,24 @@ export const loadUserData = async (
     const userDataArr = await database.getAllAsync<UserData>(`SELECT * FROM UserData`);
     let WeightAndJogdata = await database.getAllAsync<WeightAndJogdata>(`SELECT * FROM UserWeight ORDER BY UserWeightID DESC LIMIT 7`);
     const UserJogs = await database.getAllAsync<WeightAndJogdata>(`SELECT * FROM JogData ORDER BY JogDataID DESC LIMIT 7`); // order by userweightid, haetaan aina viimeisin käyttäjän paino
-    console.log(UserJogs)
 
     for(let i = 0; i < WeightAndJogdata.length; i++) //yhdistetään käyttäjän paino ja muu user data
     {
+      if(
+      UserJogs.length < 1 ) break //eka tsekataan, onko ainuttakaan userjog recordia olemassa.
+      if(
+      !UserJogs[i].Avg_Speed ||
+      !UserJogs[i].Calories_Burned ||
+      !UserJogs[i].length_Km ||
+      !UserJogs[i].Time_Minutes ||
+      !UserJogs[i].Jog_Date) break //jos recordit loppuu kesken, niin breakataan looppi.
       WeightAndJogdata[i].Avg_Speed = UserJogs[i].Avg_Speed
       WeightAndJogdata[i].Calories_Burned = UserJogs[i].Calories_Burned
       WeightAndJogdata[i].length_Km = UserJogs[i].length_Km
       WeightAndJogdata[i].Time_Minutes = UserJogs[i].Time_Minutes
       WeightAndJogdata[i].Jog_Date = UserJogs[i].Jog_Date
     }
+    console.log("w ja j "+JSON.stringify(WeightAndJogdata))
     setUserData(userDataArr)
     setUserWeight(WeightAndJogdata)
   };
@@ -171,7 +180,7 @@ export const loadUserData = async (
 const loadUserDataToConsole = async (database: SQLite.SQLiteDatabase) =>
   {
     const userDataArr = await database.getAllAsync<UserData>(`SELECT * FROM UserData ORDER BY UserID DESC`);
-    console.log(userDataArr)
+    //console.log(userDataArr)
   };
 
 export const AddProfile = async (etuNimi: string, sukuNimi: string, ikä: string, paino: string, pituus: string, database: SQLite.SQLiteDatabase): Promise<SQLite.SQLiteRunResult> => {

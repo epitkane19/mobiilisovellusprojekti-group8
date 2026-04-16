@@ -5,6 +5,7 @@ import { chartProps } from "../types/ChartProps";
 import { useEffect } from "react";
 import { Karttamoodi } from "../types/karttamoodiEnum";
 import DataTableTitle from "react-native-paper/lib/typescript/components/DataTable/DataTableTitle";
+import { WeightAndJogdata } from "../types/JogData";
 
 const { width, height } = Dimensions.get("window");
 
@@ -15,6 +16,9 @@ export function MyChart({DataArr, Karttamoodi}: chartProps) {
   const kumulatiivinenLenkkiMatka = laskekumulatiivinenLenkkienMatka()
   const kumulatiivinenLKalorit = laskekumulatiivinenKalorit()
   const kumulatiivinenLAika = laskekumulatiivinenAika()
+
+  console.log("datarr "+DataArr[0].Time_Minutes)
+  checkArrData() //tsekataan dataarr tyhjistä elementeistä
 
   const inter = require("../roboto.ttf"); 
   const fontti = useFont(inter, 12)  
@@ -141,9 +145,39 @@ else if(Karttamoodi == "lenkkiCal")
   );
   }
 
+  function checkArrData()
+  {
+    const placeholderArr:WeightAndJogdata = 
+    {
+    Avg_Speed: 0,
+    Calories_Burned: 0,
+    length_Km: 0,
+    Time_Minutes: 0,
+    Jog_Coordinates: "",
+    Jog_Date: " ",
+    Weight_Kg: 0,
+    Date: " "
+   }
+
+  for(let i = 0; i < DataArr.length; i++) //käydään läpi kaikki recordien itemit/elementit ja jos ne on null/undefined tms niin tehdään niistä 0 tai tyhjä string. täten ei tuu erroria charteissa.
+    {
+       console.log(DataArr[i].Avg_Speed)
+      if(!DataArr[i].Avg_Speed) DataArr[i].Avg_Speed = placeholderArr.Avg_Speed
+      if(!DataArr[i].Calories_Burned) DataArr[i].Calories_Burned = placeholderArr.Calories_Burned
+      if(!DataArr[i].length_Km) DataArr[i].length_Km = placeholderArr.length_Km
+      if(!DataArr[i].Time_Minutes) DataArr[i].Time_Minutes = placeholderArr.Time_Minutes
+      if(!DataArr[i].Jog_Coordinates) DataArr[i].Jog_Coordinates = placeholderArr.Jog_Coordinates
+      if(!DataArr[i].Jog_Date) DataArr[i].Jog_Date = placeholderArr.Jog_Date
+      if(!DataArr[i].Weight_Kg) DataArr[i].Weight_Kg = placeholderArr.Weight_Kg
+      if(!DataArr[i].Date) DataArr[i].Date = placeholderArr.Date
+
+    }
+  }
+
+
    function laskePainonmuutos()
   {
-    if(DataArr.length < 1) return 0
+    if(!DataArr[0].Weight_Kg) return 0
 
     let painonMuutos = 0
     let ekaPaino  = DataArr[0].Weight_Kg
@@ -164,12 +198,12 @@ else if(Karttamoodi == "lenkkiCal")
   {
     let kumulatiivinenMatka = 0
 
-    if(DataArr.length < 1) return 0
+    if(DataArr[0].length_Km == undefined) return 0
 
         for(let iteraatio = 0; iteraatio < DataArr.length; iteraatio++)
       {
         kumulatiivinenMatka += DataArr[iteraatio].length_Km
-        console.log(kumulatiivinenMatka)
+        console.log("kumulatiivinenMatka " + kumulatiivinenMatka)
       }
     return kumulatiivinenMatka.toFixed(2)
   } 
@@ -178,7 +212,7 @@ else if(Karttamoodi == "lenkkiCal")
   {
     let kumulatiivinenKalorit = 0
 
-    if(DataArr.length < 1) return 0
+    if(DataArr[0].Calories_Burned == undefined) return 0
 
         for(let iteraatio = 0; iteraatio < DataArr.length; iteraatio++)
       {
@@ -191,7 +225,7 @@ else if(Karttamoodi == "lenkkiCal")
   {
     let kumulatiivinenAika = 0
 
-    if(DataArr.length < 1) return 0
+    if(DataArr[0].Time_Minutes == undefined) return 0
 
         for(let iteraatio = 0; iteraatio < DataArr.length; iteraatio++)
       {
