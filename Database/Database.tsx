@@ -134,11 +134,20 @@ export const AddTrainingToDay = async (day: number, trainNumber: number, db: SQL
 };
 export const loadDayData = async (setTrainForDays: React.Dispatch<React.SetStateAction<TrainDay[]>>, database: SQLite.SQLiteDatabase | null) => {
 
-  console.log("ennen")
   if (!database) return
   const tableData = await database.getAllAsync<TrainDay>(`SELECT * FROM TrainDay ORDER BY Day DESC`);
   console.log("päviä " + tableData[0].Day, "trainnum " + tableData[0].TrainNumber)
   setTrainForDays(tableData)
+};
+export const deleteTraining = async (selectedTraining:number, database: SQLite.SQLiteDatabase | null) => {
+
+  if (!database) return
+  await database.runAsync(`DELETE FROM TrainData WHERE TrainDataID =?`,selectedTraining);
+};
+export const deleteExercise = async (selectedExercise:number, database: SQLite.SQLiteDatabase | null) => {
+
+  if (!database) return
+  await database.runAsync(`DELETE FROM GymData WHERE GymDataID =?`,selectedExercise);
 };
 
 

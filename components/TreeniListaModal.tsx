@@ -1,150 +1,125 @@
 import React, { useEffect, useState } from 'react';
-import { Modal, StyleSheet, Text, Pressable, View, Dimensions, TextInput, Button, FlatList, TouchableOpacity } from 'react-native';
-import { TreeniListaModalProps, TreeniModalProps } from '../types/ModalProps';
-import { horizontalScale } from '../mathFunctions/FonttiSkaalaaja';
-import { LiikeModal } from './LiikeModal';
-import LiikeCard from './LiikeCard';
+import { Modal, StyleSheet, Text, Pressable, View, Dimensions, FlatList, ScrollView } from 'react-native';
+import { TreeniListaModalProps } from '../types/ModalProps';
 import { Exercise, Training } from '../types/database';
-import { loadGymData, loadTrainData } from '../Database/Database';
-import { TreeniModal } from './TreeniModal';
-import TreeniCard from './TreeniCard';
+import { deleteTraining, loadGymData, loadTrainData } from '../Database/Database';
 
-const { width, height } = Dimensions.get("window");
+import TreeniCard from './TreeniCard';
+import ExerciseCard from './ExerciseCard';
+import { TreeniModal } from './TreeniModal';
+
 
 export function TreeniListaModal({ modalVisibleTreeniLista, setModalVisibleTreeniLista, db }: TreeniListaModalProps) {
     const [modalVisibleTreeni, setModalVisibleTreeni] = useState(false);
-    const [gymTrainList, setGymTrainList] = useState<Training[]>([])
-    const [selectedTraining, setSelectedTraining] = useState<Training | null>(null);
     const [modalTraining, setModalTraining] = useState(false);
-    const [gymExerList, setgymExerList] = useState<Exercise[]>([])
+    const [gymTrainList, setGymTrainList] = useState<Training[]>([]);
+    const [gymExerList, setGymExerList] = useState<Exercise[]>([]);
+    const [selectedTraining, setSelectedTraining] = useState<Training | null>(null);
+    const [toBeDeleted, setToBeDeleted]= useState<number>(0)
 
     const exerciseMap = Object.fromEntries(
-        gymExerList.map(e => [e.GymDataID, e.Exercise_Type])
+        gymExerList.map(e => [e.GymDataID, e])
     );
 
-
-    const numerotest = 1
-
     useEffect(() => {
-        loadGymData(setgymExerList, db)
 
-        loadTrainData(setGymTrainList, db)
-    }, [])
+        console.log("refresh")
+        loadGymData(setGymExerList, db);
+        loadTrainData(setGymTrainList, db);
+    }, [modalVisibleTreeni]);
 
+    const exerciseIds = selectedTraining
+        ? [
+            selectedTraining.Exec1,
+            selectedTraining.Exec2,
+            selectedTraining.Exec3,
+            selectedTraining.Exec4,
+            selectedTraining.Exec5,
+            selectedTraining.Exec6,
+            selectedTraining.Exec7,
+            selectedTraining.Exec8,
+            selectedTraining.Exec9,
+            selectedTraining.Exec10,
+        ].filter(Boolean)
+        : [];
+
+        function deleteTrain(){
+            deleteTraining(toBeDeleted,db)
+        }
     return (
         <View>
-            <Pressable
-
-                onPress={() => setModalVisibleTreeniLista(true)}>
+            <Pressable onPress={() => setModalVisibleTreeniLista(true)}>
                 <Text style={styles.modalNappi}>Treenit</Text>
             </Pressable>
 
             <Modal
                 animationType="slide"
                 visible={modalVisibleTreeniLista}>
-
                 <View style={styles.ohjelmaModal}>
 
                     <Text style={styles.otsikko}>Treenit</Text>
-
                     <FlatList
                         data={gymTrainList}
                         keyExtractor={(item) => item.TrainDataID.toString()}
                         renderItem={({ item }) => (
-                            <View>
-                                <TreeniCard
-                                    item={item}
-                                    TrainDataID={item.TrainDataID}
-                                    OnPress={() => {
-                                        setSelectedTraining(item);
-                                        setModalTraining(true);
-                                    }}
-                                />
-                            </View>
+                            <TreeniCard
+                                item={item}
+                                TrainDataID={item.TrainDataID}
+                                OnPress={() => {
+                                    setSelectedTraining(item);
+                                    setModalTraining(true);
+                                    setToBeDeleted(item.TrainDataID);
+                                }}
+                            />
                         )}
-                        style=""
                     />
 
                     <Modal
                         animationType="slide"
-                        visible={modalTraining}
-                    >
+                        visible={modalTraining}>
                         <View style={styles.ohjelmaModal}>
-                            <Pressable
-                                onPress={() => (console.log("exerlist ", exerciseMap))}>
-                                <Text style={styles.modalNappi}>Sulje</Text>
-                            </Pressable>
-                            <Text>Train Name: {selectedTraining?.TrainName}</Text>
-                            {selectedTraining?.Exec1 && (
-                                <Text>
-                                    {exerciseMap[Number(selectedTraining.Exec1)]}
-                                </Text>
-                            )}
-                            {selectedTraining?.Exec2 && (
-                                <Text>
-                                    {exerciseMap[Number(selectedTraining.Exec2)]}
-                                </Text>
-                            )}
-                            {selectedTraining?.Exec3 && (
-                                <Text>
-                                    {exerciseMap[Number(selectedTraining.Exec3)]}
-                                </Text>
-                            )}
-                            {selectedTraining?.Exec4 && (
-                                <Text>
-                                    {exerciseMap[Number(selectedTraining.Exec4)]}
-                                </Text>
-                            )}
-                            {selectedTraining?.Exec5 && (
-                                <Text>
-                                    {exerciseMap[Number(selectedTraining.Exec5)]}
-                                </Text>
-                            )}
-                            {selectedTraining?.Exec6 && (
-                                <Text>
-                                    {exerciseMap[Number(selectedTraining.Exec6)]}
-                                </Text>
-                            )}
-                            {selectedTraining?.Exec7 && (
-                                <Text>
-                                    {exerciseMap[Number(selectedTraining.Exec7)]}
-                                </Text>
-                            )}
-                            {selectedTraining?.Exec8 && (
-                                <Text>
-                                    {exerciseMap[Number(selectedTraining.Exec8)]}
-                                </Text>
-                            )}
-                            {selectedTraining?.Exec9 && (
-                                <Text>
-                                    {exerciseMap[Number(selectedTraining.Exec9)]}
-                                </Text>
-                            )}
-                            {selectedTraining?.Exec10 && (
-                                <Text>
-                                    {exerciseMap[Number(selectedTraining.Exec10)]}
-                                </Text>
-                            )}
-                        </View>
-                        <Pressable
-                            onPress={() => { setModalTraining(false) }}>
-                            <Text style={styles.modalNapit}>Sulje</Text>
-                        </Pressable>
 
+                            <Text style={styles.otsikko}>
+                                {selectedTraining?.TrainName}
+
+                            </Text>
+                            <ScrollView>
+                                {exerciseIds.map((id, index) => {
+                                    const exercise = exerciseMap[Number(id)];
+                                    if (!exercise) return null;
+
+                                    return (
+                                        <ExerciseCard key={index} exercise={exercise} />
+                                    );
+                                })}
+                            </ScrollView>
+                            <View style={styles.modalNappiRivi}>
+                                <Pressable onPress={() => [setModalTraining(false)]}>
+                                    <Text style={styles.modalNappi}>Sulje</Text>
+                                </Pressable>
+                                <Pressable onPress={() => [console.log("selected: ",toBeDeleted),
+                                    deleteTrain
+                                ]}>
+                                    <Text style={styles.modalNappi}>Poista </Text>
+                                </Pressable>
+                            </View>
+
+                        </View>
                     </Modal>
 
                     <View style={styles.modalNappiRivi}>
 
-                        <Pressable
-                            onPress={() => setModalVisibleTreeniLista(false)}>
+                        <Pressable onPress={() => setModalVisibleTreeniLista(false)}>
                             <Text style={styles.modalNappi}>Sulje</Text>
                         </Pressable>
+
 
                         <TreeniModal
                             modalVisibleTreeni={modalVisibleTreeni}
                             setModalVisibleTreeni={setModalVisibleTreeni}
                             db={db}
-                        ></TreeniModal>
+                        />
+
                     </View>
 
                 </View>

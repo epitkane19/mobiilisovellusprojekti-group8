@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { Modal, StyleSheet, Text, Pressable, View, Dimensions, TextInput, Button, TouchableOpacity, FlatList } from 'react-native';
+import { Modal, StyleSheet, Text, Pressable, View, Dimensions, TextInput, Button, TouchableOpacity, FlatList, ScrollView } from 'react-native';
 import { horizontalScale } from '../mathFunctions/FonttiSkaalaaja';
 import { LiikeModal } from './LiikeModal';
 import { PäiväModalProps } from '../types/ModalProps';
-import { TrainDay, Training } from '../types/database';
-import { AddTrainingToDay, loadDayData, loadTrainData } from '../Database/Database';
+import { Exercise, TrainDay, Training } from '../types/database';
+import { AddTrainingToDay, loadDayData, loadGymData, loadTrainData } from '../Database/Database';
 import { useSQLiteContext } from 'expo-sqlite';
 import TreeniCard from './TreeniCard';
+import ExerciseCard from './ExerciseCard';
 
 const { width, height } = Dimensions.get("window");
 
@@ -16,6 +17,8 @@ export function PäiväModal({ modalVisiblepv, setModalVisiblepv }: PäiväModal
     const [selectedDay, setSelectedDay] = useState<number>(0)
     const [selectedTraining, setSelectedTraining] = useState<number>(0)
     const [trainForDays, setTrainForDays] = useState<TrainDay[]>([])
+    const [gymExerList, setGymExerList] = useState<Exercise[]>([])
+
     const [refresh, setRefresh] = useState(false)
 
 
@@ -28,6 +31,7 @@ export function PäiväModal({ modalVisiblepv, setModalVisiblepv }: PäiväModal
         // console.log("ennen tyhjennystä ", trainForDays)
         //console.log("kaikki treenit, ", gymTrainList)
         //console.log("tyhjennyksen jölkeen ", trainForDays)
+        loadGymData(setGymExerList, db)
 
         loadTrainData(setGymTrainList, db)
         loadDayData(setTrainForDays, db)
@@ -38,25 +42,50 @@ export function PäiväModal({ modalVisiblepv, setModalVisiblepv }: PäiväModal
     const trainMap = Object.fromEntries(
         gymTrainList.map(train => [train.TrainDataID, train.TrainName])
     );
-    const result = trainForDays.map(day => ({
-        ...day,
-        TrainName: trainMap[day.TrainNumber]
-    }));
+
 
     function consolelogs() {
-        console.log("trainlist: ", gymTrainList)
+        //console.log("trainlist: ", gymTrainList)
         console.log("trainfordays: ", trainForDays)
     }
-    function deletearray() {
-        setTrainForDays([])
-    }
+
 
     function addTraintoDay() {
         AddTrainingToDay(selectedDay, selectedTraining, db)
         setSelectedDay(0)
         setSelectedTraining(0)
     }
-    
+    function deleteTrainDay() {
+        console.log("poistettu")
+        AddTrainingToDay(selectedDay, 0, db)
+    }
+
+    const selectedDayData = trainForDays.find(
+        d => d.Day === selectedDay
+    );
+    const selectedTrainingForDay = gymTrainList.find(
+        t => t.TrainDataID === selectedDayData?.TrainNumber
+    );
+
+    const exerciseMap = Object.fromEntries(
+        gymExerList.map(e => [e.GymDataID, e])
+    );
+
+    const exerciseIds = selectedTrainingForDay
+        ? [
+            selectedTrainingForDay.Exec1,
+            selectedTrainingForDay.Exec2,
+            selectedTrainingForDay.Exec3,
+            selectedTrainingForDay.Exec4,
+            selectedTrainingForDay.Exec5,
+            selectedTrainingForDay.Exec6,
+            selectedTrainingForDay.Exec7,
+            selectedTrainingForDay.Exec8,
+            selectedTrainingForDay.Exec9,
+            selectedTrainingForDay.Exec10,
+        ].filter(Boolean)
+        : [];
+
 
     return (
         <View>
@@ -66,7 +95,7 @@ export function PäiväModal({ modalVisiblepv, setModalVisiblepv }: PäiväModal
 
                 <Text style={styles.päivä}>Ma</Text>
                 <Text style={styles.päiväbox}>
-                    {result[6]?.TrainName}
+                    {trainMap[trainForDays[6]?.TrainNumber]}
                 </Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.päivärivi}
@@ -74,7 +103,7 @@ export function PäiväModal({ modalVisiblepv, setModalVisiblepv }: PäiväModal
 
                 <Text style={styles.päivä}>Ti</Text>
                 <Text style={styles.päiväbox}>
-                    {result[5]?.TrainName}
+                    {trainMap[trainForDays[5]?.TrainNumber]}
                 </Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.päivärivi}
@@ -82,7 +111,7 @@ export function PäiväModal({ modalVisiblepv, setModalVisiblepv }: PäiväModal
 
                 <Text style={styles.päivä}>Ke</Text>
                 <Text style={styles.päiväbox}>
-                    {result[4]?.TrainName}
+                    {trainMap[trainForDays[4]?.TrainNumber]}
                 </Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.päivärivi}
@@ -90,7 +119,7 @@ export function PäiväModal({ modalVisiblepv, setModalVisiblepv }: PäiväModal
 
                 <Text style={styles.päivä}>To</Text>
                 <Text style={styles.päiväbox}>
-                    {result[3]?.TrainName}
+                    {trainMap[trainForDays[3]?.TrainNumber]}
                 </Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.päivärivi}
@@ -98,7 +127,7 @@ export function PäiväModal({ modalVisiblepv, setModalVisiblepv }: PäiväModal
 
                 <Text style={styles.päivä}>Pe</Text>
                 <Text style={styles.päiväbox}>
-                    {result[2]?.TrainName}
+                    {trainMap[trainForDays[2]?.TrainNumber]}
                 </Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.päivärivi}
@@ -106,7 +135,7 @@ export function PäiväModal({ modalVisiblepv, setModalVisiblepv }: PäiväModal
 
                 <Text style={styles.päivä}>La</Text>
                 <Text style={styles.päiväbox}>
-                    {result[1]?.TrainName}
+                    {trainMap[trainForDays[1]?.TrainNumber]}
                 </Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.päivärivi}
@@ -114,17 +143,11 @@ export function PäiväModal({ modalVisiblepv, setModalVisiblepv }: PäiväModal
 
                 <Text style={styles.päivä}>Su</Text>
                 <Text style={styles.päiväbox}>
-                    {result[0]?.TrainName}
+                    {trainMap[trainForDays[0]?.TrainNumber]}
                 </Text>
             </TouchableOpacity>
-            <Pressable
-                onPress={() => consolelogs()}>
-                <Text style={styles.modalNappi}>Sulje</Text>
-            </Pressable>
-            <Pressable
-                onPress={() => deletearray()}>
-                <Text style={styles.modalNappi}>delete</Text>
-            </Pressable>
+            
+
             <Modal
                 animationType="slide"
                 visible={modalVisiblepv}>
@@ -134,28 +157,51 @@ export function PäiväModal({ modalVisiblepv, setModalVisiblepv }: PäiväModal
                     <Text style={styles.otsikko}>Päivän treeni</Text>
 
                     <View>
-                        {selectedTraining > 0 && (
-                            <Text>
-                                {selectedTraining}
-                            </Text>
-                        )}
+                        <View>
+                            {selectedTrainingForDay ? (
+                                <ScrollView>
+                                    <View style={styles.päivärivi}>
+                                    <TreeniCard
+                                        item={selectedTrainingForDay}
+                                        TrainDataID={selectedTrainingForDay.TrainDataID}
+                                    />
+                                    <TouchableOpacity
+                                        onPress={() => [deleteTrainDay(), setModalVisiblepv(false), setRefresh(true)]}
+                                        style={styles.delete}
+                                    >
+                                        <Text>Poista</Text>
+                                        
+                                    </TouchableOpacity>
+                                    </View>
+                                    {exerciseIds.map((id, index) => {
+                                        const exercise = exerciseMap[Number(id)];
+                                        if (!exercise) return null;
+                                        return <ExerciseCard key={index} exercise={exercise} />;
+                                    })}
+                                    
+                                </ScrollView>
+                            ) :
+
+                                <FlatList
+                                    data={gymTrainList}
+                                    keyExtractor={(item) => item.TrainDataID.toString()}
+                                    renderItem={({ item }) =>
+                                        <TreeniCard
+                                            item={item}
+                                            TrainDataID={item.TrainDataID}
+                                            SetTrainToDay={() => [console.log("lisää päivälle: ", selectedDay, ": treeninum: ", item.TrainDataID),
+                                            console.log("treenilista: ", gymTrainList[2]),
+                                            setSelectedTraining(item.TrainDataID),
+                                            ]}
+                                            selected={selectedTraining === item.TrainDataID}
+                                        />
+                                    }
+
+                                />}
+
+                        </View>
                     </View>
-                    <FlatList
-                        data={gymTrainList}
-                        keyExtractor={(item) => item.TrainDataID.toString()}
-                        renderItem={({ item }) =>
-                            <TreeniCard
-                                item={item}
-                                TrainDataID={item.TrainDataID}
-                                SetTrainToDay={() => [console.log("lisää päivälle: ", selectedDay, ": treeninum: ", item.TrainDataID),
-                                console.log("treenilista: ", gymTrainList[2]),
-                                setSelectedTraining(item.TrainDataID),
-                                ]}
-                                selected={selectedTraining === item.TrainDataID}
-                            />
-                        }
-                        style=""
-                    />
+
                     <View style={styles.modalNappiRivi}>
                         <Pressable
 
@@ -201,10 +247,14 @@ const styles = StyleSheet.create({
         verticalAlign: 'middle'
     },
     modalNappiRivi: {
+        position: 'absolute',
+        bottom: 0,
+        width: '100%',
         flexDirection: 'row',
         justifyContent: 'space-between',
-        padding: 5,
-        margin: 5,
+        padding: 20,
+        margin: 0,
+        backgroundColor: '#9F6BFB'
     },
     modalNapit: {
         backgroundColor: '#fc8bd2ff',
@@ -229,6 +279,8 @@ const styles = StyleSheet.create({
         height: 60,
         width: 250,
         borderRadius: 4,
+        fontSize:20,
+        textAlignVertical:'center'
 
     },
     päivärivi: {
@@ -244,6 +296,7 @@ const styles = StyleSheet.create({
     },
     ohjelmaModal: {
         backgroundColor: '#9F6BFB',
+        paddingBottom: 150,
         flex: 1
     },
     selectedTrainingText: {
@@ -251,5 +304,15 @@ const styles = StyleSheet.create({
         padding: 10,
         textAlign: 'center',
         color: '#333'
+    },
+    delete: {
+        backgroundColor: '#fc8bd2ff',
+        padding: 5,
+        margin: 5,
+        width: 50,
+        height: 40,
+        borderRadius: 5,
+        fontSize: 15,
+
     }
 });

@@ -17,15 +17,10 @@ interface TreeniProps {
 
 
 
-export default function TreeniCard({ item, TrainDataID, SetTrainToDay, toggleSelect, selected, OnPress }: TreeniProps) {
+export default function TreeniCard({ item, SetTrainToDay,selected, OnPress }: TreeniProps) {
 
 
     const db = useSQLiteContext(); //ladataan database konstekstista
-
-    const [userData, setUserData] = useState<UserData[]>([])
-    const [UserWeight, setUserWeight] = useState<UserWeight[]>([])
-    const [selectedExec, setSelectedExec] = useState('')
-
 
 
     return (
@@ -58,5 +53,10 @@ const styles = StyleSheet.create({
     },
     liikeText: {
         color: '#000',
+        fontSize:20,
+        
     },
+    treeniCard: {
+        alignItems:'center'
+    }
 });

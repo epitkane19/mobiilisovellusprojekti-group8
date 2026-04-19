@@ -3,9 +3,9 @@ import { Modal, StyleSheet, Text, Pressable, View, Dimensions, TextInput, Button
 import { LiikeListaModalProps } from '../types/ModalProps';
 import { horizontalScale } from '../mathFunctions/FonttiSkaalaaja';
 import { LiikeModal } from './LiikeModal';
-import LiikeCard from './LiikeCard';
 import { Exercise } from '../types/database';
 import { loadGymData } from '../Database/Database';
+import ExerciseCard from './ExerciseCard';
 
 const { width, height } = Dimensions.get("window");
 
@@ -39,10 +39,9 @@ export function LiikeListaModal({ modalVisibleLiikeLista, setModalVisibleLiikeLi
             data={gymExerList}
             keyExtractor={(item) => item.GymDataID.toString()}
             renderItem={({ item }) =>
-            <LiikeCard 
-            item={item}
-            GymDataID={item.GymDataID}
-            toggleSelect={()=>""}/>
+            <ExerciseCard 
+            exercise={item}
+           />
 }
             style=""
           />

@@ -3,18 +3,24 @@ import React, { useEffect, useState } from 'react'
 import { TreeniModalProps } from '../types/ModalProps'
 import { Modal } from 'react-native';
 import { Exercise } from '../types/database';
-import LiikeCard from './LiikeCard';
 import { AddExercise, AddTraining, loadGymData } from '../Database/Database';
+import ExerciseCard from './ExerciseCard';
 
 export function TreeniModal({ modalVisibleTreeni, setModalVisibleTreeni, db }: TreeniModalProps) {
 
     const [gymExerList, setgymExerList] = useState<Exercise[]>([])
     const [trainName, setTrainName] = useState('')
     const [select, setSelect] = useState<string[]>([])
+    const [refresh, setRefresh] = useState(false)
 
     useEffect(() => {
+        if(refresh){
+            setRefresh(false)
+        }
+        console.log("refresh")
         loadGymData(setgymExerList, db)
-    }, [])
+        console.log("gymdata;",gymExerList)
+    }, [refresh])
 
     function addTraining(){
         console.log("ss")
@@ -49,9 +55,8 @@ export function TreeniModal({ modalVisibleTreeni, setModalVisibleTreeni, db }: T
                         data={gymExerList}
                         keyExtractor={(item) => item.GymDataID.toString()}
                         renderItem={({ item }) =>
-                            <LiikeCard
-                                item={item}
-                                GymDataID={item.GymDataID}
+                            <ExerciseCard
+                                exercise={item}
                                 toggleSelect={(id) => {
                                     setSelect((prevSelect) => {
                                         if (prevSelect.includes(id)) {
@@ -71,11 +76,11 @@ export function TreeniModal({ modalVisibleTreeni, setModalVisibleTreeni, db }: T
                     <View style={styles.modalNappiRivi}>
 
                         <Pressable
-                            onPress={() => { setSelect([]); setModalVisibleTreeni(false) }}>
+                            onPress={() => [ setSelect([]), setModalVisibleTreeni(false), setRefresh(true) ]}>
                             <Text style={styles.modalNapit}>Sulje</Text>
                         </Pressable>
                         <Pressable
-                            onPress={() => {addTraining(); console.log(select)} }>
+                            onPress={() => [addTraining(), setRefresh(true)] }>
                             <Text style={styles.modalNapit}>Tallenna</Text>
                         </Pressable>
 
