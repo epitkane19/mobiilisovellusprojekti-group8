@@ -247,12 +247,12 @@ const styles = StyleSheet.create({
         verticalAlign: 'middle'
     },
     modalNappiRivi: {
-        position: 'absolute',
-        bottom: 0,
         width: '100%',
         flexDirection: 'row',
         justifyContent: 'space-between',
-        padding: 20,
+        paddingLeft:40,
+        paddingRight:40,
+        paddingTop:5,
         margin: 0,
         backgroundColor: '#9F6BFB'
     },
