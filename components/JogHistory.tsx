@@ -1,23 +1,18 @@
 import React, { useState } from "react";
 import { loadJogArr } from "../Database/Database";
-import { useSQLiteContext } from "expo-sqlite";
 import * as SQLite from 'expo-sqlite';
 
-export function JogHistory(db: SQLite.SQLiteDatabase | null, setJogArr: React.Dispatch<React.SetStateAction<string[]>>) {
+/*export async function JogHistory(db: SQLite.SQLiteDatabase | null, setJogArr: React.Dispatch<React.SetStateAction<string | undefined>>) {
 
     console.log("called")
 
-    async function getdata() {
-    const coords = await loadJogArr(setJogArr,db, 1)
-    const coords2 = coords
 
-        console.log("prev ")
-        //const output = coords![0].toString().replace(/\\/g, '');
-        console.log("loaded jog coordinates ", coords2!.replace(/\\/g, ''))
-    
-    //const strToOgj = JSON.parse(coords!)
-
-    
-    }
-    getdata()
+    let coords = await loadJogArr(setJogArr, db, 6); //vaihda id 6 joksikin omaksi toimivaksi ID:ksi, muuten tulee error
+    let coordCleaned = coords!.replaceAll("\\", "")
+    let coordToObj = JSON.parse(coordCleaned)
+    console.log("coordCleaned tyyppi: "+typeof(coordCleaned)+ " "+"coordToObj tyyppi: "+typeof(coordToObj))
+    console.log("coordToObj: ", coordToObj)
+    return coordToObj;
 }
+
+*/

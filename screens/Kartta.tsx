@@ -5,11 +5,10 @@ import * as Location from 'expo-location';
 import { leafletHtml } from '../components/leaflet';
 import { leafletHtmlStat } from '../components/leaflet_statcard';
 import { laskeAvgNopeus, LaskeMatkaKoordinaateista, laskeLenkinKalorit } from '../mathFunctions/functions'
-import { center } from '@shopify/react-native-skia';
-import { UserData, UserWeight } from '../types/database';
-import * as SQLite from 'expo-sqlite';
+import { UserData } from '../types/database';
 import { loadUserData, AddNewJog } from '../Database/Database';
 import { useSQLiteContext } from 'expo-sqlite';
+import { WeightAndJogdata } from '../types/JogData';
 
 interface coordInterface {
     coords: { lat: number; lng: number; };
@@ -26,7 +25,8 @@ export function Kartta() {
     const db = useSQLiteContext(); //ladataan database
     
     const [userData, setUserData] = useState<UserData[]>([])
-    const [UserWeight, setUserWeight] = useState<UserWeight[]>([])
+    const [UserWeight, setUserWeight] = useState<WeightAndJogdata[]>([])
+     const [Jogdata, setJogData] = useState<WeightAndJogdata[]>([])
 
     const webviewRef = useRef<WebView | null>(null);
     const statWebviewRef = useRef<WebView | null>(null);
@@ -58,8 +58,7 @@ export function Kartta() {
     }, []);
 
     useEffect(() => {
-              loadUserData(db, setUserData, setUserWeight) // useeffectilla ladataan db, eli tietokanta usetstate muuttujaan
-              //purgeDb(db)
+              loadUserData(db, setUserData, setUserWeight, setJogData) // useeffectilla ladataan db, eli tietokanta usetstate muuttujaan
             }, []);
 
     useEffect(() => {
@@ -236,14 +235,12 @@ export function Kartta() {
         let hours = Math.floor(ms / (1000 * 60 * 60));
         let minutes = Math.floor(ms / (1000 * 60) % 60);
         let seconds = Math.floor(ms / (1000) % 60);
-        let milliseconds = Math.floor((ms % 1000) / 10);
 
         const hoursString = String(hours).padStart(2, "0");
         const minutesString = String(minutes).padStart(2, "0");
         const secondsString = String(seconds).padStart(2, "0");
-        const millisecondsString = String(milliseconds).padStart(2, "0");
 
-        return `${hoursString}:${minutesString}:${secondsString}.${millisecondsString}`
+        return `${hoursString}:${minutesString}:${secondsString}`
     }
 
 
