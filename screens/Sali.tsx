@@ -4,7 +4,7 @@ import { RootStackParamList } from '../types/navigation'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { useNavigation } from '@react-navigation/native'
 import { PäiväModal } from '../components/PäiväModal'
-import { loadDayData, loadGymData, loadTrainData, loadUserData, purgeDb } from '../Database/Database'
+import { loadDayData, loadGymData,  loadUserData, purgeDb } from '../Database/Database'
 import * as SQLite from 'expo-sqlite';
 import { TrainDay, UserData, UserWeight } from '../types/database';
 import { TreeniListaModal } from '../components/TreeniListaModal'

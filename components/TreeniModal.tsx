@@ -17,7 +17,7 @@ export function TreeniModal({ modalVisibleTreeni, setModalVisibleTreeni, db }: T
         if(refresh){
             setRefresh(false)
         }
-        console.log("refresh")
+        console.log("refredddsh")
         loadGymData(setgymExerList, db)
         console.log("gymdata;",gymExerList)
     }, [refresh])
@@ -79,8 +79,9 @@ export function TreeniModal({ modalVisibleTreeni, setModalVisibleTreeni, db }: T
                             onPress={() => [ setSelect([]), setModalVisibleTreeni(false), setRefresh(true) ]}>
                             <Text style={styles.modalNapit}>Sulje</Text>
                         </Pressable>
+                        
                         <Pressable
-                            onPress={() => [addTraining(), setRefresh(true)] }>
+                            onPress={() => [addTraining(), setRefresh(true), setModalVisibleTreeni(false)] }>
                             <Text style={styles.modalNapit}>Tallenna</Text>
                         </Pressable>
 

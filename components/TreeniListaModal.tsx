@@ -16,17 +16,21 @@ export function TreeniListaModal({ modalVisibleTreeniLista, setModalVisibleTreen
     const [gymExerList, setGymExerList] = useState<Exercise[]>([]);
     const [selectedTraining, setSelectedTraining] = useState<Training | null>(null);
     const [toBeDeleted, setToBeDeleted]= useState<number>(0)
+    const [refresh, setRefresh] = useState(false)
 
     const exerciseMap = Object.fromEntries(
         gymExerList.map(e => [e.GymDataID, e])
     );
 
     useEffect(() => {
-
+        if(refresh){
+            setRefresh(false)
+        }
         console.log("refresh")
         loadGymData(setGymExerList, db);
         loadTrainData(setGymTrainList, db);
-    }, [modalVisibleTreeni]);
+        console.log("gymexlist: ", gymTrainList)
+    }, [refresh,modalVisibleTreeni]);
 
     const exerciseIds = selectedTraining
         ? [
@@ -100,7 +104,8 @@ export function TreeniListaModal({ modalVisibleTreeniLista, setModalVisibleTreen
                                 </Pressable>
                                 <Pressable onPress={() => [console.log("selected: ",toBeDeleted),
                                     deleteTrain(),
-                                    setModalTraining(false)
+                                    setModalTraining(false),
+                                    setRefresh(true)
                                 ]}>
                                     <Text style={styles.modalNappi}>Poista </Text>
                                 </Pressable>
@@ -114,6 +119,7 @@ export function TreeniListaModal({ modalVisibleTreeniLista, setModalVisibleTreen
                         <Pressable onPress={() => setModalVisibleTreeniLista(false)}>
                             <Text style={styles.modalNappi}>Sulje</Text>
                         </Pressable>
+                        
 
 
                         <TreeniModal

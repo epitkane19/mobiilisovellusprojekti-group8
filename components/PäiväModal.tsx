@@ -91,7 +91,7 @@ export function PäiväModal({ modalVisiblepv, setModalVisiblepv }: PäiväModal
         <View>
 
             <TouchableOpacity style={styles.päivärivi}
-                onPress={() => [setModalVisiblepv(true), setSelectedDay(1)]}>
+                onPress={() => [setModalVisiblepv(true), setSelectedDay(1),setRefresh(true)]}>
 
                 <Text style={styles.päivä}>Ma</Text>
                 <Text style={styles.päiväbox}>
@@ -99,7 +99,7 @@ export function PäiväModal({ modalVisiblepv, setModalVisiblepv }: PäiväModal
                 </Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.päivärivi}
-                onPress={() => [setModalVisiblepv(true), setSelectedDay(2)]}>
+                onPress={() => [setModalVisiblepv(true), setSelectedDay(2),setRefresh(true)]}>
 
                 <Text style={styles.päivä}>Ti</Text>
                 <Text style={styles.päiväbox}>
@@ -107,7 +107,7 @@ export function PäiväModal({ modalVisiblepv, setModalVisiblepv }: PäiväModal
                 </Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.päivärivi}
-                onPress={() => [setModalVisiblepv(true), setSelectedDay(3)]}>
+                onPress={() => [setModalVisiblepv(true), setSelectedDay(3),setRefresh(true)]}>
 
                 <Text style={styles.päivä}>Ke</Text>
                 <Text style={styles.päiväbox}>
@@ -115,7 +115,7 @@ export function PäiväModal({ modalVisiblepv, setModalVisiblepv }: PäiväModal
                 </Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.päivärivi}
-                onPress={() => [setModalVisiblepv(true), setSelectedDay(4)]}>
+                onPress={() => [setModalVisiblepv(true), setSelectedDay(4),setRefresh(true)]}>
 
                 <Text style={styles.päivä}>To</Text>
                 <Text style={styles.päiväbox}>
@@ -123,7 +123,7 @@ export function PäiväModal({ modalVisiblepv, setModalVisiblepv }: PäiväModal
                 </Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.päivärivi}
-                onPress={() => [setModalVisiblepv(true), setSelectedDay(5)]}>
+                onPress={() => [setModalVisiblepv(true), setSelectedDay(5),setRefresh(true)]}>
 
                 <Text style={styles.päivä}>Pe</Text>
                 <Text style={styles.päiväbox}>
@@ -131,7 +131,7 @@ export function PäiväModal({ modalVisiblepv, setModalVisiblepv }: PäiväModal
                 </Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.päivärivi}
-                onPress={() => [setModalVisiblepv(true), setSelectedDay(6)]}>
+                onPress={() => [setModalVisiblepv(true), setSelectedDay(6),setRefresh(true)]}>
 
                 <Text style={styles.päivä}>La</Text>
                 <Text style={styles.päiväbox}>
@@ -139,7 +139,7 @@ export function PäiväModal({ modalVisiblepv, setModalVisiblepv }: PäiväModal
                 </Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.päivärivi}
-                onPress={() => [setModalVisiblepv(true), setSelectedDay(7)]}>
+                onPress={() => [setModalVisiblepv(true), setSelectedDay(7),setRefresh(true)]}>
 
                 <Text style={styles.päivä}>Su</Text>
                 <Text style={styles.päiväbox}>

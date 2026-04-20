@@ -1,7 +1,6 @@
 import * as SQLite from 'expo-sqlite';
-import { Exercise, UserData, UserWeight } from '../types/database';
+import { Exercise, TrainDay, Training, UserData, UserWeight } from '../types/database';
 import { WeightAndJogdata } from '../types/JogData';
-import moment from 'moment';
 import { date } from '../types/Date';
 import { jogId } from '../types/JogDataId';
 import { jogCoordinates } from '../types/jogCoordinates';
@@ -42,9 +41,9 @@ export async function InitDatabase(db: SQLite.SQLiteDatabase) {
           UserID INTEGER NOT NULL, 
           Rest_Time_Minutes INTEGER NOT NULL CHECK (Rest_Time_Minutes >= 0),
           Repetitions INTEGER NOT NULL CHECK (Repetitions > 0),
-          Weight_Kg REAL NOT NULL CHECK (Weight_Kg > 0),
+          Weight_Kg REAL,
           Exercise_Type TEXT NOT NULL,
-          Set_Amount INTEGER NOT NULL,
+          Set_Amount INTEGER ,
           FOREIGN KEY(UserID) REFERENCES UserData(UserID) ON DELETE CASCADE
         );
          CREATE TABLE IF NOT EXISTS TrainData (
@@ -209,7 +208,7 @@ export const AddNewWeight = async (Weight_Kg: number, database: SQLite.SQLiteDat
     
 export const loadGymData = async (setgymExerList: React.Dispatch<React.SetStateAction<Exercise[]>>, database: SQLite.SQLiteDatabase | null) => {
 
-  console.log("ennen")
+  console.log("loadgymdata:")
   if (!database) return
   const tableData = await database.getAllAsync<Exercise>(`SELECT * FROM GymData ORDER BY GymDataID DESC`);
   //console.log("tässä on " +tableData[0].Rest_Time_Minutes.toString())
@@ -254,4 +253,11 @@ export const AddTraining = async (trainName: string, Exec1: string, Exec2: strin
   if (!db) return;
   console.log("INSERT execs: ", { trainName, Exec1, Exec2, Exec3 });
   const trainData = await db.runAsync('INSERT INTO TrainData (UserID,TrainName, Exec1,Exec2,Exec3,Exec4,Exec5,Exec6,Exec7,Exec8,Exec9,Exec10) VALUES (1,?,?,?,?,?,?,?,?,?,?,?)', [trainName, Exec1, Exec2, Exec3, Exec4, Exec5, Exec6, Exec7, Exec8, Exec9, Exec10])
+}
+export const loadTrainData = async (setGymTrainList: React.Dispatch<React.SetStateAction<Training[]>>, database: SQLite.SQLiteDatabase | null) => {
+    if (!database) return
+  if (!database) return
+  const tableDataTrain = await database.getAllAsync<Training>(`SELECT * FROM TrainData ORDER BY TrainDataID DESC`);
+  //console.log("tässä on " +tableData[0].Rest_Time_Minutes.toString())
+  setGymTrainList(tableDataTrain)
 }
