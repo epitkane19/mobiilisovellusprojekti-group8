@@ -252,12 +252,12 @@ export function Kartta() {
             <Pressable onPress={() => setSpdText(prev => !prev ) }>
                 <View style={styles.numberContainer}>
                     <Text style={styles.teksti}>
-                        {spdText ? `Keskinopeus alusta: ${fromStartMsToKm} km/h` : `Keskinopeus: ${msToKm} km/h`}
+                        {spdText ? `Keskinopeus alusta: ${fromStartMsToKm.toFixed(2)} km/h` : `Keskinopeus: ${msToKm.toFixed(2)} km/h`}
                     </Text>
                 </View>
             </Pressable>
             <View style={styles.numberContainerBottom}>
-                <Text style={styles.teksti}>Matka: {distance} km</Text>
+                <Text style={styles.teksti}>Matka: {distance.toFixed(2)} km</Text>
             </View>
             <WebView
                 ref={webviewRef}
