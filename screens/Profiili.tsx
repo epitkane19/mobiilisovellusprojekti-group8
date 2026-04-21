@@ -80,7 +80,8 @@ export function Profiili({ route }: Props) {
     setChartsVisibleJog(true)
   }
 
-return (
+
+if (userData.length > 0) return (
       
       <View style={styles.container}>
 
@@ -174,7 +175,7 @@ return (
         ChartsVisible= {ChartsVisibleWeight}
         setChartsVisible={setChartsVisibleWeight}
         DataArr= {Weightdata} 
-        Karttamoodi= {karttaMoodi}>   
+        Karttamoodi= {karttaMoodi}>     
       </ChartsModal>
       <ChartsModal
         ChartsVisible= {ChartsVisibleJog}
@@ -238,7 +239,6 @@ textName:
   {
     fontSize: horizontalScale(18),
     fontWeight: 'bold'
-
   },
   flexMaster: 
   {

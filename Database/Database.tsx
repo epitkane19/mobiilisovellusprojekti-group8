@@ -98,7 +98,6 @@ export async function InitDatabase(db: SQLite.SQLiteDatabase) {
   }
 }
 
-
 export const loadUserData = async (
   database: SQLite.SQLiteDatabase,
   setUserData: React.Dispatch<React.SetStateAction<UserData[]>>,
@@ -107,8 +106,8 @@ export const loadUserData = async (
   {
   
     const userDataArr = await database.getAllAsync<UserData>(`SELECT * FROM UserData`);
-    const UserWeight = await database.getAllAsync<WeightAndJogdata>(`SELECT * FROM UserWeight ORDER BY UserWeightID LIMIT 7`);
-    const UserJogs = await database.getAllAsync<WeightAndJogdata>(`SELECT * FROM JogData ORDER BY JogDataID LIMIT 7`); // order by userweightid, haetaan aina viimeisin käyttäjän paino
+    const UserWeight = await database.getAllAsync<WeightAndJogdata>(`SELECT * FROM UserWeight ORDER BY UserWeightID DESC LIMIT 7`);
+    const UserJogs = await database.getAllAsync<WeightAndJogdata>(`SELECT * FROM JogData ORDER BY JogDataID DESC LIMIT 7`); // order by userweightid, haetaan aina viimeisin käyttäjän paino
 
     console.log(UserWeight)
     setUserData(userDataArr)
@@ -133,7 +132,7 @@ const loadUserDataToConsole = async (database: SQLite.SQLiteDatabase) =>
 export const AddProfile = async (etuNimi: string, sukuNimi: string, ikä: string, paino: string, pituus: string, database: SQLite.SQLiteDatabase): Promise<SQLite.SQLiteRunResult> => {
     
     const resultData = await database!.runAsync('INSERT INTO UserData (UserID, FirstName, LastName, Age, Height_Cm) VALUES (1,?,?,?,?)', etuNimi, sukuNimi, ikä, pituus)
-    const resultWeight = await database!.runAsync("INSERT INTO UserWeight (UserID, Weight_Kg, Date) VALUES (1,?, strftime('%d %m'))", paino)  
+    const resultWeight = await database!.runAsync("INSERT INTO UserWeight (UserID, Weight_Kg, Date) VALUES (1,?, strftime('%d.%m'))", paino)  
 
   console.log(resultData)
   return resultData
@@ -177,7 +176,7 @@ export const AddNewJog = async (fromStartMsToKm: number, calories: number, dista
   if (!db) return;
 
         const minutes = time_seconds / 1000 / 60;  
-        await db.runAsync("INSERT INTO JogData (UserID, Avg_Speed, Calories_Burned, length_Km, Time_Minutes, Jog_Coordinates, Jog_Date) VALUES (1,?,?,?,?,?,strftime('%d %m'))", fromStartMsToKm, calories, distance, minutes, coordsStringify )
+        await db.runAsync("INSERT INTO JogData (UserID, Avg_Speed, Calories_Burned, length_Km, Time_Minutes, Jog_Coordinates, Jog_Date) VALUES (1,?,?,?,?,?,strftime('%d.%m'))", fromStartMsToKm, calories, distance, minutes, coordsStringify )
         const jogDataArrLength = await db.getAllAsync<WeightAndJogdata>(`SELECT * FROM JogData`);
 
         console.log("coordsstring: "+ coordsStringify)
@@ -203,7 +202,7 @@ export const updateProfile = async (ikä: number, pituus: number, Fname:string, 
 
 export const AddNewWeight = async (Weight_Kg: number, database: SQLite.SQLiteDatabase) => 
   {
-      await database!.runAsync("INSERT INTO UserWeight (UserID, Weight_Kg, Date) VALUES (1,?,strftime('%d %m'))", [Weight_Kg])
+      await database!.runAsync("INSERT INTO UserWeight (UserID, Weight_Kg, Date) VALUES (1,?,strftime('%d.%m'))", [Weight_Kg])
   };
     
 export const loadGymData = async (setgymExerList: React.Dispatch<React.SetStateAction<Exercise[]>>, database: SQLite.SQLiteDatabase | null) => {
