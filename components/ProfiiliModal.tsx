@@ -167,7 +167,6 @@ const styles = StyleSheet.create({
   },
   containerAsButton: 
   {
-
     alignItems: 'center',
     justifyContent: 'center',
     height: height/15,

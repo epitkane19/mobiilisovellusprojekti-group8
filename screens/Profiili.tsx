@@ -239,7 +239,6 @@ textName:
   {
     fontSize: horizontalScale(18),
     fontWeight: 'bold'
-
   },
   flexMaster: 
   {
