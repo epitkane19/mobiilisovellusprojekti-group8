@@ -27,7 +27,7 @@ export function Koti() {
 
   async function setValues()
     {
-      if(paino != null && paino != undefined)
+      if(paino != null && paino != undefined && paino.length > 0)
       {
         try 
         {
@@ -49,8 +49,9 @@ export function Koti() {
       {
         console.log("info is given!")
         loadUserData(db, setUserData, setUserWeight, setJogData)
-        setInfogiven(false)
+        loadNewestWeight(db, setNewestWeight)
         setPaino(null)
+        setInfogiven(false)
       }
 
   useEffect(() => {
