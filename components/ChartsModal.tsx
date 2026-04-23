@@ -8,9 +8,9 @@ const { width, height } = Dimensions.get("window");
 
 export function ChartsModal({ChartsVisible, setChartsVisible, DataArr, Karttamoodi}: KarttaModalProps) {
 
+console.log("chartsModal")
 function resetoiModal()
 {
-    DataArr = [] //poistetaan array data jotta tulee uudelleen renderöinti
     setChartsVisible(false)
 }
 
@@ -23,8 +23,7 @@ function resetoiModal()
           <View style={styles.modalView}>
                 <MyChart 
                 DataArr={DataArr}
-                Karttamoodi={Karttamoodi}>
-                
+                Karttamoodi={Karttamoodi}>           
                 </MyChart>           
             <View style={styles.PressableContainer}>    
                 <Pressable

@@ -1,13 +1,13 @@
 {
   "expo": {
-    "name": "GitFit",
-    "slug": "GitFit",
+    "name": "group8-project",
+    "slug": "group8-project",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/gym-svgrepo-com.png",
+    "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/gym-svgrepo-com.png",
+      "image": "./assets/splash-icon.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -17,15 +17,15 @@
     "android": {
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
-        "foregroundImage": "./assets/gym-svgrepo-com.png",
-        "backgroundImage": "./assets/gym-svgrepo-com.png",
-        "monochromeImage": "./assets/gym-svgrepo-com.png"
+        "foregroundImage": "./assets/android-icon-foreground.png",
+        "backgroundImage": "./assets/android-icon-background.png",
+        "monochromeImage": "./assets/android-icon-monochrome.png"
       },
       "predictiveBackGestureEnabled": false,
       "package": "com.eerikp.group8project"
     },
     "web": {
-      "favicon": "./assets/gym-svgrepo-com.png"
+      "favicon": "./assets/favicon.png"
     },
     "plugins": [
       "expo-sqlite"

@@ -26,6 +26,7 @@ export function Kartta() {
     
     const [userData, setUserData] = useState<UserData[]>([])
     const [UserWeight, setUserWeight] = useState<WeightAndJogdata[]>([])
+     const [Jogdata, setJogData] = useState<WeightAndJogdata[]>([])
 
     const webviewRef = useRef<WebView | null>(null);
     const statWebviewRef = useRef<WebView | null>(null);
@@ -57,7 +58,7 @@ export function Kartta() {
     }, []);
 
     useEffect(() => {
-              loadUserData(db, setUserData, setUserWeight) // useeffectilla ladataan db, eli tietokanta usetstate muuttujaan
+              loadUserData(db, setUserData, setUserWeight, setJogData) // useeffectilla ladataan db, eli tietokanta usetstate muuttujaan
             }, []);
 
     useEffect(() => {
@@ -283,7 +284,7 @@ export function Kartta() {
                         </View>
 
                         <Text style={styles.statCardText}>Matka: {distance.toFixed(2)} km</Text>
-                        <Text style={styles.statCardText}>Keskinopeus alusta: {fromStartMsToKm.toFixed(2)} km/h</Text>
+                        <Text style={styles.statCardText}>Keskinopeus (kokonais): {fromStartMsToKm.toFixed(2)} km/h</Text>
                         <Text style={styles.statCardText}>Aika: {formatTime(trackedJog.at(-1)?.time ?? 0)}</Text>
                         <Text style={styles.statCardText}>Kaloreita kulutettu: {calories.toFixed(0)}</Text>
 
