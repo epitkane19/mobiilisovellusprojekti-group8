@@ -4,7 +4,6 @@ import { loadUserData } from '../Database/Database';
 import { useSQLiteContext } from 'expo-sqlite';
 import { UserData } from '../types/database';
 import { LuoProfiiliValikkoModal } from '../components/LuoProfiiliModal';
-//import { JogHistory } from '../components/JogHistory';
 import { jogCoordinates } from '../types/jogCoordinates';
 import { WeightAndJogdata } from '../types/JogData';
 

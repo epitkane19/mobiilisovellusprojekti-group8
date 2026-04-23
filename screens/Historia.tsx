@@ -11,7 +11,6 @@ import { jogId } from '../types/JogDataId';
 import { jogCoordinates } from '../types/jogCoordinates';
 import { loadUserData, loadJogArr } from '../Database/Database';
 import { useSQLiteContext } from 'expo-sqlite';
-//import { JogHistory } from '../components/JogHistory';
 import * as SQLite from 'expo-sqlite';
 
 interface coordInterface {
@@ -90,6 +89,22 @@ export function Historia() {
         return `${hoursString}:${minutesString}:${secondsString}`
     }
 
+    const deleteJog = async (jogId: number) => {
+        if (!db) return;
+
+        try {
+            await db.runAsync("DELETE FROM JogData WHERE JogDataID = ?", jogId);
+
+            await loadJogArr(db, setJogDataArr);
+
+            setShowStats(false);
+
+        } catch (error) {
+            console.log("Virhe lenkkiä poistettaessa:", error);
+        }
+    };
+
+
     return (
         <View style={styles.container}>
            
@@ -134,12 +149,21 @@ export function Historia() {
                             <Text style={styles.statCardText}>Keskinopeus: {selectedJog.Avg_Speed} km/h</Text>
                             <Text style={styles.statCardText}>Kalorit: {selectedJog.Calories_Burned}</Text>
 
-                            <Pressable
-                                onPress={() => setShowStats(false)}
-                                style={styles.statcardButton}
-                            >
-                                <Text style={styles.statcardButtonText}>Sulje</Text>
-                            </Pressable>
+                            <View style={{ flexDirection:"row", justifyContent: "space-between", width: "100%", }}>
+                                <Pressable
+                                    onPress={() => deleteJog(selectedJog.JogDataID)}
+                                    style={styles.statcardButton}
+                                >
+                                    <Text style={styles.statcardButtonText}>Poista lenkki</Text>
+                                </Pressable>
+                            
+                                <Pressable
+                                    onPress={() => setShowStats(false)}
+                                    style={styles.statcardButton}
+                                >
+                                    <Text style={styles.statcardButtonText}>Sulje</Text>
+                                </Pressable>
+                            </View>
 
                             </View>
                         )}
