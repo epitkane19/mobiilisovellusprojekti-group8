@@ -152,7 +152,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         padding: 5,
-        margin: 5,
+        margin: 20,
     },
     modalNapit: {
         backgroundColor: '#fc8bd2ff',
@@ -172,7 +172,10 @@ const styles = StyleSheet.create({
     },
     ohjelmaModal: {
         backgroundColor: '#9F6BFB',
-        flex: 1
+        flex: 1,
+        paddingBottom:'10%',
+        paddingTop:'10%',
+        alignItems:'center'
     },
     exerciseText: {
         paddingLeft: 10,

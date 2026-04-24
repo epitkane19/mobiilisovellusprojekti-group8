@@ -47,6 +47,8 @@ const styles = StyleSheet.create({
         height: 60,
         width: 250,
         borderRadius: 4,
+        justifyContent:'center',
+        alignItems:'center'
     },
     selectedLiike: {
         backgroundColor: '#fc8bd2ff',

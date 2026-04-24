@@ -166,10 +166,11 @@ export function PäiväModal({ modalVisiblepv, setModalVisiblepv }: PäiväModal
                     <Text style={styles.otsikko}>Päivän treeni</Text>
 
                     <View>
-                        <View>
+                        <View style={styles.pvTreeniLista}>
                             {selectedTrainingForDay ? (
                                 <ScrollView>
-                                    <View style={styles.päivärivi}>
+                                    <View style={styles.päiväriviDel}>
+                                        
                                     <TreeniCard
                                         item={selectedTrainingForDay}
                                         TrainDataID={selectedTrainingForDay.TrainDataID}
@@ -213,6 +214,15 @@ export function PäiväModal({ modalVisiblepv, setModalVisiblepv }: PäiväModal
 
                     <View style={styles.modalNappiRivi}>
                         <Pressable
+                            onPress={() => [setModalVisiblepv(false),
+                            setSelectedDay(0),
+                            setSelectedTraining(0),
+                            setRefresh(true)
+
+                            ]}>
+                            <Text style={styles.modalNappi}>Sulje</Text>
+                        </Pressable>
+                        <Pressable
 
                             onPress={() => [
                                 setRefresh(true),
@@ -223,15 +233,7 @@ export function PäiväModal({ modalVisiblepv, setModalVisiblepv }: PäiväModal
                             <Text style={styles.modalNappi}>Tallenna</Text>
                         </Pressable>
 
-                        <Pressable
-                            onPress={() => [setModalVisiblepv(false),
-                            setSelectedDay(0),
-                            setSelectedTraining(0),
-                            setRefresh(true)
-
-                            ]}>
-                            <Text style={styles.modalNappi}>Sulje</Text>
-                        </Pressable>
+                        
 
 
 
@@ -269,14 +271,16 @@ const styles = StyleSheet.create({
         verticalAlign: 'middle'
     },
     modalNappiRivi: {
-        position: 'absolute',
-        bottom: 0,
         width: '100%',
         flexDirection: 'row',
         justifyContent: 'space-between',
-        padding: 20,
+        paddingLeft:40,
+        paddingRight:40,
+        paddingTop:5,
         margin: 0,
-        backgroundColor: '#9F6BFB'
+        backgroundColor: '#9F6BFB',
+        position:'absolute',
+        bottom:40
     },
     modalNapit: {
         backgroundColor: '#fc8bd2ff',
@@ -305,6 +309,13 @@ const styles = StyleSheet.create({
         textAlignVertical:'center'
 
     },
+    päiväriviDel: {
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        width: 300,
+
+    },
     päivärivi: {
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -329,12 +340,17 @@ const styles = StyleSheet.create({
     },
     delete: {
         backgroundColor: '#fc8bd2ff',
-        padding: 5,
-        margin: 5,
+        
         width: 50,
         height: 40,
         borderRadius: 5,
-        fontSize: 15,
+        justifyContent: 'center',
+        alignItems: 'center',
+        
 
+    },
+    pvTreeniLista:{
+        alignItems:'center'
     }
+    
 });

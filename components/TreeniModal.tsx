@@ -72,7 +72,6 @@ export function TreeniModal({ modalVisibleTreeni, setModalVisibleTreeni, db }: T
                             />}
                         style=""
                     />
-                    <Text>{select}</Text>
                     <View style={styles.modalNappiRivi}>
 
                         <Pressable
@@ -99,18 +98,19 @@ const styles = StyleSheet.create({
     modalNappi: {
         backgroundColor: '#fc8bd2ff',
         padding: 5,
-        margin: 5,
+        margin: 10,
         width: 100,
         height: 40,
         borderRadius: 5,
         fontSize: 15,
         textAlign: 'center',
-        verticalAlign: 'middle'
+        verticalAlign: 'middle',
+        
     },
     modalNappiRivi: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        padding: 10,
+        padding: 0,
         margin: 10,
     },
     modalNapit: {
@@ -127,6 +127,8 @@ const styles = StyleSheet.create({
 
     ohjelmaModal: {
         backgroundColor: '#9F6BFB',
+        paddingBottom:'10%',
+        paddingTop:'10%',
         flex: 1
     },
     otsikko: {

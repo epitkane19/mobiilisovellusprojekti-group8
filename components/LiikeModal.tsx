@@ -45,7 +45,7 @@ export function LiikeModal({ modalVisibleLiike, setModalVisibleLiike,db }: Liike
                 visible={modalVisibleLiike}>
 
                 <View>
-                    <Text style={styles.otsikko}>Lisää liike, painot, toistot, lepo yms</Text>
+                    <Text style={styles.otsikko}>Lisää liikkeen tiedot</Text>
                     <View style={styles.infoRow}>
                         <Text style={styles.otsikko2}>Liike</Text>
                         <TextInput
@@ -100,15 +100,16 @@ export function LiikeModal({ modalVisibleLiike, setModalVisibleLiike,db }: Liike
 
                     <View style={styles.modalNappiRivi}>
                         <Pressable
+                            onPress={() => setModalVisibleLiike(false)}>
+                            <Text style={styles.modalNapit}>Sulje</Text>
+                        </Pressable>
+                        <Pressable
 
                             onPress={()=>{addMove(), setRefresh(true)}}>
                             <Text style={styles.modalNapit}>Tallenna</Text>
                         </Pressable>
 
-                        <Pressable
-                            onPress={() => setModalVisibleLiike(false)}>
-                            <Text style={styles.modalNapit}>Sulje</Text>
-                        </Pressable>
+                        
                     </View>
 
                 </View>
