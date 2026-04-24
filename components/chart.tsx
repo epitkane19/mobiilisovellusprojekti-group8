@@ -3,14 +3,13 @@ import { CartesianChart, Line } from "victory-native";
 import {useFont } from "@shopify/react-native-skia";
 import { chartProps } from "../types/ChartProps";
 import { WeightAndJogdata } from "../types/JogData";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const { width, height } = Dimensions.get("window");
 
 
 export function MyChart({DataArr, Karttamoodi}: chartProps) {
-
-   
+ 
   checkArrData() //tsekataan dataarr tyhjistä elementeistä
   const painonMuutos = laskePainonmuutos()
   const kumulatiivinenLenkkiMatka = laskekumulatiivinenLenkkienMatka()
@@ -26,9 +25,8 @@ export function MyChart({DataArr, Karttamoodi}: chartProps) {
   return (
     <View style={{ height: height/2.5, width: width/1.1, backgroundColor: '#e2d1ff', padding: 20}}>
       <CartesianChart
-        data={DataArr} 
+        data={DataArr.toReversed()} 
         xKey="Date"
-        domain={{x: [1, 7]}} 
         yKeys={["Weight_Kg"]}    
         domainPadding={{top: 30, bottom: 30}}
         axisOptions={{
@@ -58,8 +56,8 @@ else if(Karttamoodi == "pituusAvg")
     return (
     <View style={{ height: height/2.5, width: width/1.1, backgroundColor: '#e2d1ff', padding: 20}}>
       <CartesianChart
-        data={DataArr} 
-        xKey="Jog_Date" 
+        data={DataArr.toReversed()} 
+        xKey="Jog_Date"
         yKeys={["Avg_Speed"]}    
         domainPadding={{top: 30, bottom: 30}}
         axisOptions={{
@@ -88,7 +86,7 @@ else if(Karttamoodi == "lenkkiAika")
     return (
     <View style={{ height: height/2.5, width: width/1.1, backgroundColor: '#e2d1ff', padding: 20}}>
       <CartesianChart
-        data={DataArr} 
+        data={DataArr.toReversed()} 
         xKey="Jog_Date" 
         yKeys={["Time_Minutes"]}    
         domainPadding={{top: 30, bottom: 30}}
@@ -108,7 +106,7 @@ else if(Karttamoodi == "lenkkiAika")
         )}
       </CartesianChart>
       <View>
-        <Text>7vrk lenkkien aika yhteensä: {kumulatiivinenLAika} tuntia</Text>
+        <Text>7vrk lenkkien aika yhteensä: {kumulatiivinenLAika} minuuttia</Text>
       </View>
     </View>
   );
@@ -118,7 +116,7 @@ else if(Karttamoodi == "lenkkiCal")
     return (
     <View style={{ height: height/2.5, width: width/1.1, backgroundColor: '#e2d1ff', padding: 20}}>
       <CartesianChart
-        data={DataArr} 
+        data={DataArr.toReversed()} 
         xKey="Jog_Date" 
         yKeys={["Calories_Burned"]}    
         domainPadding={{top: 30, bottom: 30}}
@@ -148,15 +146,16 @@ else if(Karttamoodi == "lenkkiCal")
   {
     const placeholderArr:WeightAndJogdata[] = 
     [{
-    Avg_Speed: 0,
-    Calories_Burned: 0,
-    length_Km: 0,
-    Time_Minutes: 0,
-    Jog_Coordinates: "",
-    Jog_Date: " ",
-    Weight_Kg: 0,
-    Date: " "
-   }]
+      Avg_Speed: 0,
+      Calories_Burned: 0,
+      length_Km: 0,
+      Time_Minutes: 0,
+      Jog_Coordinates: "",
+      Jog_Date: " ",
+      Weight_Kg: 0,
+      Date: " ",
+      JogDataID: 0
+    }]
 
    if(DataArr.length == 0)  
     {
@@ -195,7 +194,7 @@ else if(Karttamoodi == "lenkkiCal")
 
         ekaPaino = DataArr[iteraatio].Weight_Kg
       }
-    return painonMuutos  * -1 .toFixed(2)
+    return painonMuutos.toFixed(2)
   }
   function laskekumulatiivinenLenkkienMatka()
   {
@@ -236,4 +235,3 @@ else if(Karttamoodi == "lenkkiCal")
   }
 
 }
-
