@@ -70,7 +70,6 @@ export async function InitDatabase(db: SQLite.SQLiteDatabase) {
         FOREIGN KEY(UserID) REFERENCES UserData(UserID) ON DELETE CASCADE
         );  
 
-        -- Insert only if no records exist in TrainDay
         INSERT INTO TrainDay (UserID, Day, TrainNumber)
         SELECT 1, 1, 0 WHERE NOT EXISTS (SELECT 1 FROM TrainDay WHERE UserID = 1 AND Day = 1);
         INSERT INTO TrainDay (UserID, Day, TrainNumber)
@@ -91,7 +90,7 @@ export async function InitDatabase(db: SQLite.SQLiteDatabase) {
   try {
     await initDB();
     await db.runAsync('PRAGMA foreign_keys = ON')
-      //loadUserDataToConsole(db)
+    loadUserDataToConsole(db)
   } catch (error) {
     alert("tietokantavirhe, käynnistä sovellus uudelleen")
   }
