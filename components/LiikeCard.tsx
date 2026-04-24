@@ -34,6 +34,7 @@ export default function LiikeCard({item, GymDataID}: LiikeProps) {
             <TouchableOpacity
             onPress={() => setSelectedExec(item.GymDataID)}
             >
+                
                 <Text style={styles.liike}>{item.GymDataID}  {item.Rest_Time_Minutes} {selectedExec} {GymDataID}</Text>
             </TouchableOpacity>
         </View>
