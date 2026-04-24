@@ -167,7 +167,6 @@ const styles = StyleSheet.create({
   },
   containerAsButton: 
   {
-
     alignItems: 'center',
     justifyContent: 'center',
     height: height/15,
@@ -195,7 +194,14 @@ const styles = StyleSheet.create({
     width: width/3,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#9F6BFB'
+    backgroundColor: '#9F6BFB',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 2,
+    elevation: 5,
   },
   modalView: 
   {

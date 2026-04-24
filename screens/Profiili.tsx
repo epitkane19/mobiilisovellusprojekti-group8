@@ -1,6 +1,6 @@
 import React, { use, useEffect, useState } from 'react';
-import {View, Text, Button, StyleSheet, Dimensions, Pressable} from 'react-native';
-import { NativeStackScreenProps } from '@react-navigation/native-stack'
+import {View, Text, Button, StyleSheet, Dimensions, Pressable, Image} from 'react-native';
+import { NativeStackScreenProps, NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { RootStackParamList } from '../types/navigation'
 import { ProfiiliValikkoModal } from '../components/ProfiiliModal';
 import { loadNewestWeight, loadUserData, purgeDb } from '../Database/Database';
@@ -10,6 +10,8 @@ import { ChartsModal } from '../components/ChartsModal';
 import { useSQLiteContext } from 'expo-sqlite';
 import { WeightAndJogdata } from '../types/JogData';
 import { Karttamoodi } from '../types/karttamoodiEnum';
+import { useNavigation } from '@react-navigation/native';
+
 
 const { width, height } = Dimensions.get("window");
 
@@ -29,6 +31,8 @@ const sivut = [
 export function Profiili({ route }: Props) {
 
   const db = useSQLiteContext(); //ladataan database konstekstista
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+
 
    useEffect(() => {
           loadUserData(db, setUserData, setUserWeight, setJogData) //(uus versio) useeffectilla ladataan db:stä tiedot mitä halutaan
@@ -80,13 +84,20 @@ export function Profiili({ route }: Props) {
     setChartsVisibleJog(true)
   }
 
-return (
+
+if (userData.length > 0) return (
       
       <View style={styles.container}>
 
       <View style={styles.textarea}>
+
+        <Image
+         source={require('../assets/person-svgrepo-com.png')}
+        style={styles.image}>
+        </Image>
+        
                           <View style={styles.flexMaster}>
-          
+                          
                           <View style={styles.flexSingle}>
                               <View style={styles.textRow}>
                                 <Text  style= {styles.text}> Nimi: </Text>
@@ -166,7 +177,17 @@ return (
          style= {styles.Pressable} 
           onPress={() => asetaLenkkiAikaChartiin()}>
           <Text style={styles.textClose}>lenkkien ajat</Text>
-        </Pressable>    
+        </Pressable>   
+          
+      </View>  
+      
+      <View style={styles.PressableContainer}>
+        <Pressable
+         style= {styles.Pressable2} 
+          onPress={() => navigation.navigate("Historia")}>
+          <Text style={styles.textPressable}>lenkkien historia</Text>
+        </Pressable>
+ 
       </View>  
                      
           </View>
@@ -174,7 +195,7 @@ return (
         ChartsVisible= {ChartsVisibleWeight}
         setChartsVisible={setChartsVisibleWeight}
         DataArr= {Weightdata} 
-        Karttamoodi= {karttaMoodi}>   
+        Karttamoodi= {karttaMoodi}>     
       </ChartsModal>
       <ChartsModal
         ChartsVisible= {ChartsVisibleJog}
@@ -189,6 +210,11 @@ return (
 
 
 const styles = StyleSheet.create({
+image:
+    {
+    width: width/5,
+    height: height/10
+    },
 container: 
 {
   flex: 1,
@@ -238,11 +264,9 @@ textName:
   {
     fontSize: horizontalScale(18),
     fontWeight: 'bold'
-
   },
   flexMaster: 
   {
-    margin: width/15,
     gap: width/15,
     flexDirection: 'row'
   },
@@ -282,7 +306,7 @@ textName:
     flexDirection: 'column',
     alignContent: 'center',
     alignItems: 'center',
-    height: height/1.5
+    height: height/1.4
   },
   textClose: 
   {
