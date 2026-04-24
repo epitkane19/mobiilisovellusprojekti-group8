@@ -229,7 +229,6 @@ flexMaster:
   },
   flexSingle: 
   {
-    margin: width/15,
     gap: width/15,
   },
   textRow: 

@@ -60,7 +60,7 @@ else if(Karttamoodi == "pituusAvg")
       <CartesianChart
         data={DataArr.toReversed()} 
         xKey="Jog_Date"
-        yKeys={["Avg_Speed"]}    
+        yKeys={["length_Km"]}    
         domainPadding={{top: 30, bottom: 30}}
         axisOptions={{
           tickCount: DataArr.length,
@@ -72,7 +72,7 @@ else if(Karttamoodi == "pituusAvg")
         {}
         {({ points }) => (
           <Line 
-          points={points.Avg_Speed} 
+          points={points.length_Km} 
           color="red" strokeWidth={3}
           animate={{ type: "timing", duration: 500 }} />
         )}

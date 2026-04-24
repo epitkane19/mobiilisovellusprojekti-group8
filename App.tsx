@@ -12,7 +12,9 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Sali } from './screens/Sali';
 import { SQLiteProvider } from 'expo-sqlite';
 import { InitDatabase } from './Database/Database';
+import {Appearance} from 'react-native';
 
+Appearance.setColorScheme('light')
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
