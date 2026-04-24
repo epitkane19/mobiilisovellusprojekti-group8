@@ -11,7 +11,6 @@ import { jogId } from '../types/JogDataId';
 import { jogCoordinates } from '../types/jogCoordinates';
 import { loadUserData, loadJogArr } from '../Database/Database';
 import { useSQLiteContext } from 'expo-sqlite';
-//import { JogHistory } from '../components/JogHistory';
 import * as SQLite from 'expo-sqlite';
 
 interface coordInterface {
@@ -91,62 +90,89 @@ export function Historia() {
         return `${hoursString}:${minutesString}:${secondsString}`
     }
 
+    const deleteJog = async (jogId: number) => {
+        if (!db) return;
+
+        try {
+            await db.runAsync("DELETE FROM JogData WHERE JogDataID = ?", jogId);
+
+            await loadJogArr(db, setJogDataArr);
+
+            setShowStats(false);
+
+        } catch (error) {
+            console.log("Virhe lenkkiä poistettaessa:", error);
+        }
+    };
+
+
     return (
         <View style={styles.container}>
+            <View style={styles.historyContainer}>
            
-            <FlatList
-                data={JogDataArr}
-                keyExtractor={item => item.JogDataID.toString()}
-                renderItem={({ item }) => (
-                    <Pressable style={styles.row} onPress={() => [openModal(item), handleMessage]}>
-                        <Text style={styles.rowText}>
-                        {item.Jog_Date}
-                        </Text>
-                        <Text style={styles.rowText}>{item.length_Km} km</Text>
-                    </Pressable>
-                )}
-            />
-            
-            <Modal 
-                visible={showStats}
-                transparent={true}
-                animationType="slide"
-            >
-                <View style={styles.modalContainer}>
-                    <View style={styles.statcard}>
-                        {selectedJog && (
-                            <View>
-                                <View style={{ height: 200, marginBottom: 20 }}>
-                                    <WebView
-                                        ref={statWebviewRef}
-                                        originWhitelist={['*']}
-                                        source={{ html: leafletHtmlStat }}
-                                        onMessage={handleMessage}
-                                        style={{ flex: 1 }}
-                                        onLoadEnd={() => {
-                                            sendPolyline();
-                                        }}
-                                        />
+                <FlatList
+                    data={JogDataArr}
+                    keyExtractor={item => item.JogDataID.toString()}
+                    renderItem={({ item }) => (
+                        <Pressable style={styles.row} onPress={() => [openModal(item), handleMessage]}>
+                            <Text style={styles.rowText}>
+                            {item.Jog_Date}
+                            </Text>
+                            <Text style={styles.rowText}>{item.length_Km.toFixed(2)} km</Text>
+                        </Pressable>
+                    )}
+                />
+                
+                <Modal 
+                    visible={showStats}
+                    transparent={true}
+                    animationType="slide"
+                >
+                    <View style={styles.modalContainer}>
+                        <View style={styles.statcard}>
+                            {selectedJog && (
+                                <View>
+                                    <View style={{ height: 200, marginBottom: 20 }}>
+                                        <WebView
+                                            ref={statWebviewRef}
+                                            originWhitelist={['*']}
+                                            source={{ html: leafletHtmlStat }}
+                                            onMessage={handleMessage}
+                                            style={{ flex: 1 }}
+                                            onLoadEnd={() => {
+                                                sendPolyline();
+                                            }}
+                                            />
+                                    </View>
+                                <Text style={styles.title}>Lenkki</Text>
+                                <Text style={styles.statCardText}>Päivä: {selectedJog.Jog_Date}</Text>
+                                <Text style={styles.statCardText}>Matka: {selectedJog.length_Km.toFixed(2)} km</Text>
+                                <Text style={styles.statCardText}>Aika: {formatTime(selectedJog.Time_Minutes * 60 * 1000)}</Text>
+                                <Text style={styles.statCardText}>Keskinopeus: {selectedJog.Avg_Speed.toFixed(2)} km/h</Text>
+                                <Text style={styles.statCardText}>Kalorit: {selectedJog.Calories_Burned.toFixed(0)}</Text>
+
+                                <View style={{ flexDirection:"row", justifyContent: "space-between", width: "100%", }}>
+                                    <Pressable
+                                        onPress={() => deleteJog(selectedJog.JogDataID)}
+                                        style={styles.statcardButton}
+                                    >
+                                        <Text style={styles.statcardButtonText}>Poista lenkki</Text>
+                                    </Pressable>
+                                
+                                    <Pressable
+                                        onPress={() => setShowStats(false)}
+                                        style={styles.statcardButton}
+                                    >
+                                        <Text style={styles.statcardButtonText}>Sulje</Text>
+                                    </Pressable>
                                 </View>
-                            <Text style={styles.title}>Lenkki</Text>
-                            <Text style={styles.statCardText}>Päivä: {selectedJog.Jog_Date}</Text>
-                            <Text style={styles.statCardText}>Matka: {selectedJog.length_Km} km</Text>
-                            <Text style={styles.statCardText}>Aika: {formatTime(selectedJog.Time_Minutes * 60 * 1000)}</Text>
-                            <Text style={styles.statCardText}>Keskinopeus: {selectedJog.Avg_Speed} km/h</Text>
-                            <Text style={styles.statCardText}>Kalorit: {selectedJog.Calories_Burned}</Text>
 
-                            <Pressable
-                                onPress={() => setShowStats(false)}
-                                style={styles.statcardButton}
-                            >
-                                <Text style={styles.statcardButtonText}>Sulje</Text>
-                            </Pressable>
-
-                            </View>
-                        )}
+                                </View>
+                            )}
+                        </View>
                     </View>
-                </View>
-            </Modal>
+                </Modal>
+            </View>
         </View>
     )
 }
@@ -154,7 +180,7 @@ export function Historia() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#fff',
+        backgroundColor: '#9F6BFB',
     },
     numberContainer: {
         marginTop: 10,
@@ -167,6 +193,13 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         marginLeft: 10,
         backgroundColor: '#fff',
+    },
+    historyContainer: {
+        marginTop: 10,
+        marginBottom: 10,
+        marginLeft: 10,
+        marginRight: 10,
+        backgroundColor: '#9F6BFB',
     },
     teksti: {
         fontSize: 30
@@ -198,7 +231,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#ffffff',
         borderColor: '#000000',
         borderWidth: 2,
-        borderRadius: 20,
+        borderRadius: 5,
+        height: 40,
         width: "48%",
         alignItems: "center",
         justifyContent: "center",
@@ -207,7 +241,7 @@ const styles = StyleSheet.create({
         fontSize: 20
     },
     statcardButtonText: {
-        fontSize: 30,
+        fontSize: 20,
     },
     row: {
         padding: 15,
