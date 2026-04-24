@@ -4,8 +4,9 @@ import { LiikeListaModalProps } from '../types/ModalProps';
 import { horizontalScale } from '../mathFunctions/FonttiSkaalaaja';
 import { LiikeModal } from './LiikeModal';
 import { Exercise } from '../types/database';
-import { loadGymData } from '../Database/Database';
+import { deleteExercise, loadGymData } from '../Database/Database';
 import ExerciseCard from './ExerciseCard';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const { width, height } = Dimensions.get("window");
 
@@ -24,7 +25,13 @@ export function LiikeListaModal({ modalVisibleLiikeLista, setModalVisibleLiikeLi
     loadGymData(setgymExerList, db) 
   }, [refresh,modalVisibleLiike])
 
+  const handleDelete = async (id: number) => {
+  await deleteExercise(id, db);
+  setRefresh(true);
+};
+
   return (
+    <SafeAreaView>
     <View>
       <Pressable
 
@@ -46,6 +53,8 @@ export function LiikeListaModal({ modalVisibleLiikeLista, setModalVisibleLiikeLi
             renderItem={({ item }) =>
             <ExerciseCard 
             exercise={item}
+            onDelete={handleDelete}
+
            />
 }
             style=""
@@ -69,6 +78,7 @@ export function LiikeListaModal({ modalVisibleLiikeLista, setModalVisibleLiikeLi
         </View>
       </Modal>
     </View>
+    </SafeAreaView>
   );
 }
 
@@ -108,6 +118,9 @@ const styles = StyleSheet.create({
   },
   ohjelmaModal: {
     backgroundColor: '#9F6BFB',
-    flex: 1
+    flex: 1,
+    paddingTop:'10%',
+    paddingBottom:'10%',
+    
   }
 });
